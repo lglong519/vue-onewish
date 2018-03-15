@@ -1,23 +1,23 @@
 <template>
-    <view class="page">
-        <view class=" weui-cells_after-title">
-            <view class="weui-cell">
-                <view class="weui-cell__bd">
-                    <view class='text-center text-orange-3 text-20'>文章列表</view>
-                </view>
-            </view>
-            <block wx:for='{{articles}}' wx:for-index='i' wx:key='title'>
-                <view class="weui-cell weui-cell_access {{index===i && 'bg-orange-0'}} {{onPlay && type==item[0].type && index==i && 'text-green-0'}}"
-                    bindtap='switchToPlay' data-audio-index='{{i}}' data-audio-type='{{item[0].type}}'>
-                    <view class="weui-cell__bd">
-                        <view style="display: inline-block; vertical-align: middle">{{item[0].title}}</view>
-                        <view wx:if='{{item[0].author}}' class='text-grey text-12'>作者:{{item[0].author}}</view>
-                    </view>
+    <div class="page">
+        <div class=" weui-cells_after-title">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class='text-center text-orange-3 text-20'>文章列表</div>
+                </div>
+            </div>
+                <div v-for='(item,i) in articles' :key="item[0].title" class="weui-cell weui-cell_access" v-bind:class="{'bg-orange-0':index===i, 'text-green-0':onPlay && type==item[0].type && index==i}" @click='switchToPlay' :data-audio-index='i' :data-audio-type='item[0].type'>
+                    <div class="weui-cell__bd">
+                        <div style="display: inline-block; vertical-align: middle">{{item[0].title}}</div>
+                        <div v-if='item[0].author' class='text-grey text-12'>作者:{{item[0].author}}</div>
+                    </div>
                     <!--箭头  -->
-                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-                </view>
-            </block>
-            <view class="weui-cell weui-cell_access"></view>
-        </view>
-    </view>
+                    <div class="weui-cell__ft weui-cell__ft_in-access"></div>
+                </div>
+            <div class="weui-cell weui-cell_access"></div>
+        </div>
+    </div>
 </template>
+
+<style src='./articles.css'></style>
+<script src='./articles.js'></script>

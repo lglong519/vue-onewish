@@ -1,5 +1,21 @@
 //index.js
-import { switchToPlay } from '../../utils/funs.js';
+// import { switchToPlay } from '../../utils/funs.js';
+
+export default {
+	data() {
+		return {
+			articles: Array,
+			index: Number,
+			onPlay: Boolean,
+			type: String
+		}
+	},
+	method: {
+		switchToPlay() {
+		}
+	}
+}
+/*
 const app = getApp();
 
 Page({
@@ -24,3 +40,4 @@ Page({
 	}
 
 })
+*/

@@ -7,6 +7,7 @@ import 'vuetify/dist/vuetify.min.css'
 import "material-design-icons/iconfont/material-icons.css";
 import "./assets/style/color.css";
 import "./assets/style/topology.css";
+import "./assets/style/weui.css";
 
 Vue.use(colors)
 Vue.use(Vuetify)

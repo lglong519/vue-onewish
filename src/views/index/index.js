@@ -1,4 +1,22 @@
 //index.js
+export default {
+	methods: {
+		toArticles(e) {
+			let type = e.currentTarget.dataset.type
+			localStorage.setItem('audioType', type)
+			this.$router.push({ path: '/articles' })
+		},
+		toMusic(e) {
+			let type = e.currentTarget.dataset.type
+			localStorage.setItem('audioType', type)
+			this.$router.push({ path: '/music' })
+		}
+	}
+}
+
+
+
+/*
 const app = getApp();
 
 Page({
@@ -28,3 +46,4 @@ Page({
 		
 	}
 })
+*/
