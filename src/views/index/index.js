@@ -1,5 +1,10 @@
 //index.js
 export default {
+	data() {
+		return {
+			path: 'index'
+		}
+	},
 	methods: {
 		toArticles(e) {
 			let type = e.currentTarget.dataset.type

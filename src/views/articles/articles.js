@@ -7,7 +7,8 @@ export default {
 			articles: Array,
 			index: Number,
 			onPlay: Boolean,
-			type: String
+			type: String,
+			path: 'articles'
 		}
 	},
 	method: {

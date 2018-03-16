@@ -21,8 +21,13 @@
                 <span>Articles</span>
             </div>
         </div>
+        <the-footer :path='path'></the-footer>
     </div>
 </template>
 
-<style src='./index.css'></style>
-<script src='./index.js'></script>
+<style src='./index.css'>
+
+</style>
+
+<script src='./index.js'>
+</script>
