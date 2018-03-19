@@ -33,6 +33,7 @@ export default {
         this.$router.push({
           path: `/${className}`
         });
+        this.$emit("changePath", className);
       }
     }
   }
