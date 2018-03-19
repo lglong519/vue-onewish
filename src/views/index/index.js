@@ -1,9 +1,7 @@
 //index.js
 export default {
 	data() {
-		return {
-			path: 'index'
-		}
+		return {}
 	},
 	methods: {
 		toArticles(e) {
