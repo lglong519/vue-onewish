@@ -1,5 +1,7 @@
 //index.js
 // import { switchToPlay } from '../../utils/funs.js';
+import articleZH from '../../../static/libs/articleZH'
+import articleEN from '../../../static/libs/articleEN'
 
 export default {
 	data() {
@@ -10,9 +12,35 @@ export default {
 			type: String
 		}
 	},
-	method: {
+	computed: {
+
+	},
+	methods: {
 		switchToPlay() {
 		}
+	},
+	beforeCreate() {
+		console.log('articles', "beforeCreates");
+	},
+	created() {
+		console.log('articles', "created");
+		this.articles = articleEN;
+	},
+	beforeMount() {
+		console.log('articles', "beforeMount");
+	},
+	mounted() {
+		console.log('articles', "mounted");
+
+	},
+	beforeUpdate() {
+		console.log('articles', "beforeUpdate");
+	},
+	updated() {
+		console.log('articles', "updated");
+	},
+	beforeDestroy() {
+		console.log('articles', "beforeDestroy");
 	}
 }
 /*

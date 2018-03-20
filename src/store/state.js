@@ -1,3 +1,8 @@
+import articleZH from '../../static/libs/articleZH'
+import articleEN from '../../static/libs/articleEN'
+import classical from '../../static/libs/classical'
+import music from '../../static/libs/music'
+
 const state = {
    type: null,
    index: null,
@@ -15,6 +20,10 @@ const state = {
       mode: ['once', 'loop', 'list', 'listLoop', 'randomList', 'randomInfinite', 'randomAll'],
       name: ['单曲播放', '单曲循环', '列表顺序', '列表循环', '列表随机', '列表随机循环', '全部随机']
    },
-   path: 'index'
+   path: '',
+   articles: articleZH,
+   articleEN,
+   classical,
+   music
 }
 export default state;

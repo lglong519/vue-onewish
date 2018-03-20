@@ -1,6 +1,8 @@
 <template>
   <div id="onewish">
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
     <the-footer @changePath='changePath' :path='path'></the-footer>
   </div>
 </template>
@@ -17,6 +19,28 @@ export default {
     changePath(path) {
       this.$store.commit("changePath", path);
     }
+  },
+  beforeCreate() {
+    console.log("  app", "beforeCreates");
+  },
+  created() {
+    console.log("  app", "created");
+  },
+  beforeMount() {
+    console.log("  app", "beforeMount");
+  },
+  mounted() {
+    console.log("  app", "mounted");
+  },
+  beforeUpdate() {
+    console.log("  app", "beforeUpdate");
+  },
+  updated() {
+    console.log("  app", "updated");
+    this.changePath(this.$router.history.current.path.replace("/", ""));
+  },
+  beforeDestroy() {
+    console.log("app", "beforeDestroy");
   }
 };
 </script>
