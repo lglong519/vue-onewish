@@ -46,6 +46,11 @@ export default {
 </script>
 
 <style>
+html,
+body,
+#onewish {
+  height: 100%;
+}
 #onewish {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

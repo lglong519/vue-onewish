@@ -2,6 +2,10 @@
 // import { switchToPlay } from '../../utils/funs.js';
 import articleZH from '../../../static/libs/articleZH'
 import articleEN from '../../../static/libs/articleEN'
+const articles = {
+	articleZH,
+	articleEN
+}
 
 export default {
 	data() {
@@ -17,14 +21,25 @@ export default {
 	},
 	methods: {
 		switchToPlay() {
+		},
+		updateArticles() {
+			let currArticles = articles[localStorage.getItem('articleType') || 'articleZH'];
+			this.articles = currArticles;
 		}
+	},
+	activated() {
+		console.log('articles', "activated");
+		this.updateArticles();
+	},
+	deactivated() {
+		console.log('articles', "deactivated");
 	},
 	beforeCreate() {
 		console.log('articles', "beforeCreates");
 	},
 	created() {
 		console.log('articles', "created");
-		this.articles = articleEN;
+
 	},
 	beforeMount() {
 		console.log('articles', "beforeMount");
