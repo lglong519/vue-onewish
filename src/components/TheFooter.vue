@@ -1,5 +1,6 @@
 <template>
-	<div class="flex-row align-center justify-between the-footer text-grey">
+	<div class="flex-row align-center justify-between the-footer text-grey bg-white" 
+  :class="{'bg-articles':path=='articles'}">
 		<div class="index" :class="{active:path=='index'}" @click="switchTo($event)">
 			<i class='material-icons'>home</i>
 			<span>主页</span>
@@ -46,6 +47,9 @@ $color-brown: #8a635c;
 $color-orange: #f1b140;
 $color-green: #83c44e;
 $color-sky: #3d83f8;
+.bg-articles {
+  background-color: #ebe1d5;
+}
 .the-footer {
   position: fixed;
   left: 0;

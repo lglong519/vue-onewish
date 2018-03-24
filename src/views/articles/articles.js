@@ -1,10 +1,8 @@
-//index.js
-// import { switchToPlay } from '../../utils/funs.js';
-import articleZH from '../../../static/libs/articleZH'
-import articleEN from '../../../static/libs/articleEN'
+import Funs from '../../utils/funs';
+let switchToPlay = Funs.switchToPlay;
 const articles = {
-	articleZH,
-	articleEN
+	articleZH: Funs.articleZH,
+	articleEN: Funs.articleEN
 }
 
 export default {
@@ -20,15 +18,9 @@ export default {
 
 	},
 	methods: {
-		switchToPlay() {
-		},
+		switchToPlay: Funs.switchToPlay,
 		updateArticles() {
-			let type = localStorage.getItem('type');
-			if (/articleZH|articleEN/ig.test(type)) {
-				this.articles = articles[type];
-			} else {
-				this.articles = articles[localStorage.getItem('articleType')];
-			}
+			this.articles = articles[localStorage.getItem('articleType')];
 		}
 	},
 	activated() {

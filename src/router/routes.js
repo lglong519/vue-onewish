@@ -1,13 +1,17 @@
-let views = ['index', 'articles'];  // ,'play','music','account'
-let routes = views.map(item => {
+let views = {
+   index: 'onewish',
+   articles: '文章',
+   music: '音乐'
+};  // ,'play','music','account'
+let routes = Object.keys(views).map(item => {
    return {
       path: `/${item}`,
-      name: `${item.toUpperCase()}`,
+      name: `${views[item]}`,
       component: () => import('../views/' + item + '/index.vue')
    }
 })
 routes.unshift({
    path: '',
-   redirect: `/${views[0]}`
+   redirect: `/${Object.keys(views)[0]}`
 });
 export default routes;

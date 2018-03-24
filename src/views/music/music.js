@@ -22,13 +22,10 @@ export default {
   methods: {
     switchToPlay() {
     },
+    playControl() {
+    },
     updateAudioList() {
-      let type = localStorage.getItem('type');
-      if (/classical|music/ig.test(type)) {
-        this.audioType = type;
-      } else {
-        this.audioType = localStorage.getItem('musicType');
-      }
+      this.audioType = localStorage.getItem('musicType');
       this.audioList = audioList[this.audioType];
     }
   },

@@ -1,5 +1,6 @@
 <template>
   <div id="onewish">
+    <audio :src="url" id='audio' preload="auto"></audio>
     <keep-alive>
       <router-view/>
     </keep-alive>
@@ -13,6 +14,9 @@ export default {
   computed: {
     path() {
       return this.$store.getters.path;
+    },
+    url() {
+      return this.$store.getters.url;
     }
   },
   methods: {
@@ -31,6 +35,7 @@ export default {
   },
   mounted() {
     console.log("  app", "mounted");
+    this.$store.commit("getAudio", document.getElementById("audio"));
   },
   beforeUpdate() {
     console.log("  app", "beforeUpdate");
@@ -56,7 +61,6 @@ body,
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  max-width: 768px;
   margin: 0 auto;
 }
 </style>

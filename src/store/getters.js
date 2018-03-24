@@ -18,4 +18,4 @@ export const type = state => state.type;
 export const index = state => state.index;
 export const audioList = state => state.audioList;
 export const url = state => state.url;
-export const articles = state => state.articles;
+export const Audio = state => state.Audio;
