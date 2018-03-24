@@ -23,8 +23,12 @@ export default {
 		switchToPlay() {
 		},
 		updateArticles() {
-			let currArticles = articles[localStorage.getItem('articleType') || 'articleZH'];
-			this.articles = currArticles;
+			let type = localStorage.getItem('type');
+			if (/articleZH|articleEN/ig.test(type)) {
+				this.articles = articles[type];
+			} else {
+				this.articles = articles[localStorage.getItem('articleType')];
+			}
 		}
 	},
 	activated() {
@@ -71,7 +75,7 @@ Page({
 			borderStyle: 'white'
 		})
 		this.setData({
-			articles: wx.getStorageSync('audioType') == 'articleEN' ? app.Funs.articleEN : app.Funs.articleZH,
+			articles: localStorage.getItem('audioType') == 'articleEN' ? app.Funs.articleEN : app.Funs.articleZH,
 			type: app.data.type,
 			index: app.data.index,
 			onPlay: app.data.onPlay

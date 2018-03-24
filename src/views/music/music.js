@@ -1,5 +1,69 @@
-// pages/music/music.js
-const app = getApp();
+//index.js
+// import { switchToPlay } from '../../utils/funs.js';
+import classical from '../../../static/libs/classical'
+import music from '../../../static/libs/music'
+const audioList = {
+  classical,
+  music
+}
+
+export default {
+  data() {
+    return {
+      audioList: Array,
+      index: Number,
+      onPlay: Boolean,
+      audioType: String
+    }
+  },
+  computed: {
+
+  },
+  methods: {
+    switchToPlay() {
+    },
+    updateAudioList() {
+      let type = localStorage.getItem('type');
+      if (/classical|music/ig.test(type)) {
+        this.audioType = type;
+      } else {
+        this.audioType = localStorage.getItem('musicType');
+      }
+      this.audioList = audioList[this.audioType];
+    }
+  },
+  activated() {
+    console.log('articles', "activated");
+    this.updateAudioList();
+  },
+  deactivated() {
+    console.log('articles', "deactivated");
+  },
+  beforeCreate() {
+    console.log('articles', "beforeCreates");
+  },
+  created() {
+    console.log('articles', "created");
+
+  },
+  beforeMount() {
+    console.log('articles', "beforeMount");
+  },
+  mounted() {
+    console.log('articles', "mounted");
+
+  },
+  beforeUpdate() {
+    console.log('articles', "beforeUpdate");
+  },
+  updated() {
+    console.log('articles', "updated");
+  },
+  beforeDestroy() {
+    console.log('articles', "beforeDestroy");
+  }
+}
+/*
 
 Page({
   data: {
@@ -8,21 +72,21 @@ Page({
   switchToPlay: app.Funs.switchToPlay,
   onShow: function () {
     this.setData({
-      audioType: wx.getStorageSync('audioType') == 'music' && 'music' || 'classical'
+      audioType: localStorage.getItem('audioType') == 'music' && 'music' || 'classical'
     });
     wx.setTabBarStyle({
       selectedColor: '#8a635c',
     });
     wx.setNavigationBarColor({
       frontColor: '#ffffff',
-      backgroundColor: wx.getStorageSync('audioType') == 'music' ? '#514e5a' : '#8a635c',
+      backgroundColor: localStorage.getItem('audioType') == 'music' ? '#514e5a' : '#8a635c',
       animation: {
         duration: 400,
         timingFunc: 'easeIn'
       }
     })
     this.setData({
-      audioList: wx.getStorageSync('audioType') == 'music' ? app.Funs.music : app.Funs.classical,
+      audioList: localStorage.getItem('audioType') == 'music' ? app.Funs.music : app.Funs.classical,
       type: app.data.type,
       index: app.data.index,
       onPlay: app.data.onPlay
@@ -72,3 +136,4 @@ Page({
     wx.stopPullDownRefresh()
   }
 })
+*/
