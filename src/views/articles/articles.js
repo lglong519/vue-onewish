@@ -1,19 +1,61 @@
-//index.js
-// import { switchToPlay } from '../../utils/funs.js';
+import Funs from '../../utils/funs';
+const articles = {
+	articleZH: Funs.articleZH,
+	articleEN: Funs.articleEN
+}
 
 export default {
 	data() {
 		return {
 			articles: Array,
-			index: Number,
-			onPlay: Boolean,
-			type: String,
-			path: 'articles'
 		}
 	},
-	method: {
-		switchToPlay() {
+	computed: {
+		onPlay() {
+			return this.$store.getters.onPlay;
+		},
+		type() {
+			return this.$store.getters.type;
+		},
+		index() {
+			return this.$store.getters.index;
 		}
+	},
+	methods: {
+		switchToPlay: Funs.switchToPlay,
+		updateArticles() {
+			this.articles = articles[localStorage.getItem('articleType')];
+		}
+	},
+	activated() {
+		console.log('articles', "activated");
+		this.updateArticles();
+	},
+	deactivated() {
+		console.log('articles', "deactivated");
+	},
+	beforeCreate() {
+		console.log('articles', "beforeCreates");
+	},
+	created() {
+		console.log('articles', "created");
+
+	},
+	beforeMount() {
+		console.log('articles', "beforeMount");
+	},
+	mounted() {
+		console.log('articles', "mounted");
+
+	},
+	beforeUpdate() {
+		console.log('articles', "beforeUpdate");
+	},
+	updated() {
+		console.log('articles', "updated");
+	},
+	beforeDestroy() {
+		console.log('articles', "beforeDestroy");
 	}
 }
 /*
@@ -29,7 +71,7 @@ Page({
 			borderStyle: 'white'
 		})
 		this.setData({
-			articles: wx.getStorageSync('audioType') == 'articleEN' ? app.Funs.articleEN : app.Funs.articleZH,
+			articles: localStorage.getItem('audioType') == 'articleEN' ? app.Funs.articleEN : app.Funs.articleZH,
 			type: app.data.type,
 			index: app.data.index,
 			onPlay: app.data.onPlay

@@ -1,21 +1,41 @@
 //index.js
 export default {
 	data() {
-		return {
-			path: 'index'
-		}
+		return {}
 	},
 	methods: {
 		toArticles(e) {
 			let type = e.currentTarget.dataset.type
-			localStorage.setItem('audioType', type)
+			localStorage.setItem('articleType', type)
 			this.$router.push({ path: '/articles' })
 		},
 		toMusic(e) {
 			let type = e.currentTarget.dataset.type
-			localStorage.setItem('audioType', type)
+			localStorage.setItem('musicType', type)
 			this.$router.push({ path: '/music' })
 		}
+	},
+	beforeCreate() {
+		console.log('index', "beforeCreates");
+	},
+	created() {
+		console.log('index', "created");
+	},
+	beforeMount() {
+		console.log('index', "beforeMount");
+	},
+	mounted() {
+		console.log('index', "mounted");
+
+	},
+	beforeUpdate() {
+		console.log('index', "beforeUpdate");
+	},
+	updated() {
+		console.log('index', "updated");
+	},
+	beforeDestroy() {
+		console.log('index', "beforeDestroy");
 	}
 }
 

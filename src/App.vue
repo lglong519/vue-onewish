@@ -1,22 +1,66 @@
 <template>
   <div id="onewish">
-    <router-view/>
+    <audio :src="url" id='audio' preload="auto"></audio>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
+    <the-footer @changePath='changePath' :path='path'></the-footer>
   </div>
 </template>
 
 <script>
 export default {
-  name: "App"
+  name: "App",
+  computed: {
+    path() {
+      return this.$store.getters.path;
+    },
+    url() {
+      return this.$store.getters.url;
+    }
+  },
+  methods: {
+    changePath(path) {
+      this.$store.commit("SET_PATH", path);
+    }
+  },
+  beforeCreate() {
+    console.log("  app", "beforeCreates");
+  },
+  created() {
+    console.log("  app", "created");
+  },
+  beforeMount() {
+    console.log("  app", "beforeMount");
+  },
+  mounted() {
+    console.log("  app", "mounted");
+    this.$store.commit("SET_AUDIO", document.getElementById("audio"));
+  },
+  beforeUpdate() {
+    console.log("  app", "beforeUpdate");
+  },
+  updated() {
+    console.log("  app", "updated");
+    this.changePath(this.$router.history.current.path.replace("/", ""));
+  },
+  beforeDestroy() {
+    console.log("app", "beforeDestroy");
+  }
 };
 </script>
 
 <style>
-#app {
+html,
+body,
+#onewish {
+  height: 100%;
+}
+#onewish {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 0 auto;
 }
 </style>

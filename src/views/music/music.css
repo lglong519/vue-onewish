@@ -1,0 +1,28 @@
+/* pages/music/music.wxss */
+
+.banner {
+   position: relative;
+   width: 100%;
+   min-height: 160px;
+   background-color: rgba(41, 37, 52, 0.8);
+   color: #fff;
+}
+
+.classical {
+   background-color: rgba(112, 63, 54, 0.8);
+}
+
+.banner img {
+   width: 125px;
+   height: 125px;
+}
+
+.headset {
+   position: absolute;
+   right: 30px;
+   bottom: 15px;
+}
+
+.series {
+   flex-basis: 50px;
+}

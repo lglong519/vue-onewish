@@ -1,10 +1,134 @@
+import Funs from '../../utils/funs';
+import ThePlayController from "../../components/ThePlayController";
+console.log('ThePlayController', ThePlayController);
+let toMinute = Funs.toMinute;
+let toSecond = Funs.toSecond;
+let getCurrPart = Funs.getCurrPart;
+
+
+export default {
+	components: { ThePlayController },
+	data() {
+		return {
+			//page data
+			currPart: '',
+			currentTime: 0,
+			currentTimeFormat: '00:00',
+			timeStamp: 0,
+			duration: 0,
+			durationFormat: '00:00',
+			windowHeight: 0,
+			id: null,
+			show: false,
+			hide: false,
+			hideTabBar: false,
+			showAnchor: true,
+			showZoom: false,
+			onshow: true,
+			modeIcon: this.$store.getters.playModeLib.list,
+			modeIndex: this.$store.getters.playModeLib.index[localStorage.getItem('playMode')],
+			modeName: this.$store.getters.playModeLib.name,
+			showToast: false,
+			modeTimer: null,
+			rollup: false,
+			showTrans: null,
+			showTransIndex: null,
+
+		}
+	},
+	computed: {
+		onPlay() {
+			return this.$store.getters.onPlay;
+		},
+		type() {
+			return this.$store.getters.type;
+		},
+		index() {
+			return this.$store.getters.index;
+		},
+		currAudio() {
+			return this.$store.getters.currAudio;
+		},
+		Audio() {
+			return this.$store.getters.Audio;
+		},
+		sectionTimes() {
+			//如果是文章类型，设置章节时间列表
+			if (this.type.indexOf('article') > -1) {
+				let sections = this.currAudio[0].sections;
+				if (sections) {
+					var sectionTimes = sections.map(i => i.time);
+				}
+			}
+			return sectionTimes || [];
+		}
+	},
+	methods: {
+		playControl: Funs.playControl,
+		sliderChange(val) {
+			this.Audio.currentTime = val;
+			this.timeStamp = 0;
+		},
+		sliderChanging(val) {
+			this.timeStamp = val
+		}
+
+	},
+	activated() {
+		console.log('play', "activated");
+		this.show = true;
+	},
+	deactivated() {
+		console.log('play', "deactivated");
+		this.show = false;
+	},
+	mounted() {
+		console.log('play', "mounted");
+		var i = 0;
+		var that = this;
+		let Audio = this.Audio;
+		setInterval(() => {
+			if (!Audio.src || !this.$store.getters.url || !this.show) { return }
+
+			if (parseInt(this.duration) != parseInt(Audio.duration)) {
+				this.duration = Audio.duration,
+					this.durationFormat = toMinute(Audio.duration)
+			}
+			if (this.timeStamp) {
+				return;
+			}
+			let currentTimeFormat = toMinute(Audio.currentTime);
+
+			if (!this.onPlay && this.onshow && i++ % 10 == 0) {
+				if (toMinute(this.currentTime) != currentTimeFormat) {
+					this.currentTimeFormat = currentTimeFormat;
+					this.currentTime = Audio.currentTime;
+				}
+			}
+
+			if (toMinute(this.currentTime) != currentTimeFormat) {
+				if (this.onPlay && this.onshow) {
+					this.currentTime = Audio.currentTime;
+					this.currentTimeFormat = currentTimeFormat;
+				}
+				let currPart = getCurrPart(this.sectionTimes, Audio.currentTime);
+				if (currPart != this.currPart) {
+					this.currPart = currPart;
+				}
+			}
+
+		}, 100);
+	},
+
+}
+
+
+/*
 // pages/play/play
 const app = getApp();
 let appData = app.data;
 let Audio = appData.Audio;
-let toMinute = app.Funs.toMinute;
-let toSecond = app.Funs.toSecond;
-let getCurrPart = app.Funs.getCurrPart;
+
 
 Page({
 	data: {
@@ -27,9 +151,9 @@ Page({
 		showZoom: false,
 		animation: {},
 		onshow: true,
-		modeIcon: appData.modeIcon.list,
-		modeIndex: appData.modeIcon.index[wx.getStorageSync('playMode')],
-		modeName: appData.modeIcon.name,
+		modeIcon: appData.playModeLib.list,
+		modeIndex: appData.playModeLib.index[localStorage.getItem('playMode')],
+		modeName: appData.playModeLib.name,
 		showToast: false,
 		modeTimer: null,
 		rollup: false,
@@ -37,10 +161,9 @@ Page({
 		showTransIndex: null
 	},
 	onLoad() {
-		app.Funs.setAudioEvent(getApp(), this);
+		app.setAudioEvent(getApp(), this);
 	},
 	onReady() {
-		console.log('ready');
 		var that = this;
 		var data = this.data;
 		app.data.playOnload = this.onLoad;
@@ -132,7 +255,7 @@ Page({
 		if (Audio !== getApp().data.Audio) {
 			Audio = getApp().data.Audio;
 		}
-		if (wx.getStorageSync('hideTabBar')) {
+		if (localStorage.getItem('hideTabBar')) {
 			wx.hideTabBar({
 				aniamtion: true
 			})
@@ -153,21 +276,15 @@ Page({
 			borderStyle: appData.url ? 'white' : ''
 		});
 		console.log('play onshow');
-		//如果是文章类型，设置章节时间列表
-		if (appData.type.indexOf('article') > -1 && this.currAudio != appData.currAudio) {
-			let sections = appData.currAudio[0].sections;
-			if (sections) {
-				var sectionTimes = sections.map(i => i.time);
-			}
-		}
+		
 		this.setData({
 			currAudio: appData.currAudio,
 			type: appData.type,
 			onPlay: appData.onPlay,
 			sectionTimes: sectionTimes || [],
-			showAnchor: wx.getStorageSync('showAnchor') === false ? false : true,
-			showZoom: wx.getStorageSync('showZoom'),
-			modeIndex: appData.modeIcon.index[wx.getStorageSync('playMode')],
+			showAnchor: localStorage.getItem('showAnchor') === false ? false : true,
+			showZoom: localStorage.getItem('showZoom'),
+			modeIndex: appData.playModeLib.index[localStorage.getItem('playMode')],
 			onshow: true,
 			hide: false
 		});
@@ -201,13 +318,7 @@ Page({
 			currentTime: sliderValue.value,
 			timeStamp: 1
 		});
-	},//后退5s
-	playBackward() {
-		Audio.seek(this.data.currentTime - 5);
-	},
-	playForward() {
-		Audio.seek(this.data.currentTime + 5);
-	},
+	}
 	skip_previous() {
 		app.Funs.skip_previous(this, app);
 	},
@@ -216,7 +327,7 @@ Page({
 	},
 	playModeChange() {
 		this.data.modeTimer && clearTimeout(this.data.modeTimer);
-		if (this.data.modeIndex < appData.modeIcon.list.length - 1) {
+		if (this.data.modeIndex < appData.playModeLib.list.length - 1) {
 			this.data.modeIndex++;
 		} else {
 			this.data.modeIndex = 0;
@@ -231,17 +342,13 @@ Page({
 				showToast: false
 			});
 		}, 2000);
-		wx.setStorageSync('playMode', appData.modeIcon.mode[this.data.modeIndex]);
+		localStorage.setItem('playMode', appData.playModeLib.mode[this.data.modeIndex]);
 		wx.removeStorageSync('randomList');
-		if (this.data.onPlay){
+		if (this.data.onPlay) {
 			app.Funs.createRandomIndex();
 		}
 	},
-	rollup() {
-		this.setData({
-			rollup: !this.data.rollup
-		});
-	},
+	
 	showTrans(e) {
 		var dataset = e.currentTarget.dataset;
 		if (this.data.showTransIndex == dataset.showTransIndex) {
@@ -259,3 +366,4 @@ Page({
 	}
 })
 
+*/

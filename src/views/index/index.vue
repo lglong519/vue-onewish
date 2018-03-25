@@ -21,7 +21,6 @@
                 <span>Articles</span>
             </div>
         </div>
-        <the-footer :path='path'></the-footer>
     </div>
 </template>
 

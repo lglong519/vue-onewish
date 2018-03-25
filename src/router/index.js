@@ -1,30 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/views/index/index.vue'
-import articles from '@/views/articles/articles.vue'
-// import index from '@/views/index/index.vue'
+import routes from './routes'
 Vue.use(Router)
-
 
 const router = new Router({
   mode: 'history',
-  routes: [
-    {
-      path: '',
-      redirect: '/index'
-    },
-    {
-      path: '/index',
-      name: 'index',
-      component: () => import('../views/index/index.vue')
-    },
-    {
-      path: '/articles',
-      name: 'articles',
-      component: articles
-    }
-
-  ]
+  routes
 })
 
 router.afterEach((to, from, next) => {
@@ -32,10 +13,3 @@ router.afterEach((to, from, next) => {
 })
 
 export default router;
-/**
-  "pages/index/index",
-        "pages/articles/articles",
-        "pages/play/play",
-        "pages/account/account",
-        "pages/music/music"
- */
