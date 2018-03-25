@@ -1,5 +1,4 @@
 import Funs from '../../utils/funs';
-let switchToPlay = Funs.switchToPlay;
 const articles = {
 	articleZH: Funs.articleZH,
 	articleEN: Funs.articleEN
@@ -9,13 +8,18 @@ export default {
 	data() {
 		return {
 			articles: Array,
-			index: Number,
-			onPlay: Boolean,
-			type: String
 		}
 	},
 	computed: {
-
+		onPlay() {
+			return this.$store.getters.onPlay;
+		},
+		type() {
+			return this.$store.getters.type;
+		},
+		index() {
+			return this.$store.getters.index;
+		}
 	},
 	methods: {
 		switchToPlay: Funs.switchToPlay,

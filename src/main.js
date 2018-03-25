@@ -9,9 +9,9 @@ import store from './store'
 import colors from 'vuetify/es5/util/colors'
 import 'vuetify/dist/vuetify.min.css'
 import "material-design-icons/iconfont/material-icons.css";
+import "@/assets/style/weui.css";
 import "@/assets/style/color.css";
 import "@/assets/style/topology.css";
-import "@/assets/style/weui.css";
 
 //component
 import TheFooter from "@/components/TheFooter";

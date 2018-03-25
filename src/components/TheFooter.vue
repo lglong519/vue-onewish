@@ -55,6 +55,7 @@ $color-sky: #3d83f8;
   left: 0;
   bottom: 0;
   width: 100%;
+  z-index: 110;
   > div {
     display: flex;
     flex-direction: column;

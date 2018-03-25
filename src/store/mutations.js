@@ -1,19 +1,14 @@
 import Funs from '../utils/funs';
 
 export default {
-   changePath(state, path) {
+   SET_PATH(state, path) {
       state.path = path;
    },
-   getAudio(state, Audio) {
+   SET_AUDIO(state, Audio) {
       state.Audio = Audio;
    },
-   setAudioSrc(state, params) {
-      if (params.type != state.type || params.index != state.index) {
-         state.type = params.type;
-         state.index = params.index;
-         state.audioList = Funs[params.type]
-         state.currAudio = state.audioList[params.index]
-      }
-      state.Audio.src = state.currAudio[0].url || '';
-   }
+   SET_ONPLAY(state, onPlay) {
+      state.onPlay = onPlay;
+   },
+   RESET_DATA: Funs.resetData
 }

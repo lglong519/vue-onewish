@@ -2,8 +2,8 @@ import articleZH from '../../static/libs/articleZH'
 import articleEN from '../../static/libs/articleEN'
 import classical from '../../static/libs/classical'
 import music from '../../static/libs/music'
+import { setTimeout } from 'timers';
 
-// console.log('articleZH', articleZH);
 
 const init = (state) => {
    let data = state;
@@ -27,97 +27,89 @@ const init = (state) => {
 
    data.currAudio = data.audioList[data.index];
    data.url = data.currAudio[0].url;
-   //+audio
-   if (data.audioBackstage) {
-      // data.Audio = data.Audio || wx.getBackgroundAudioManager();
-   } else {
-      // data.Audio = data.Audio || wx.createInnerAudioContext();
-   }
+
    /*
-   if (data.Audio.src) {
-      data.Audio.src == data.url || (data.url && (data.Audio.src = data.url));
-   } else {
-      if (!data.audioBackstage) {
+      if (data.Audio.src) {
+         data.Audio.src == data.url || (data.url && (data.Audio.src = data.url));
+      } else {
          data.url && (data.Audio.src = data.url);
       }
-   }*/
-
+   */
 }
 
 
 //重置所有数据
-const resetData = (type, index) => {
-   const app = getApp();
-   let data = app.data;
-   localStorage.setItem('type', type);
-   localStorage.setItem('index', index);
-   if (type === data.type && index === data.index) {
-      data.onPlay = true;
+const resetData = (state, params) => {
+   localStorage.setItem('type', params.type);
+   localStorage.setItem('index', params.index);
+   if (params.type === state.type && params.index === state.index) {
+      state.onPlay = true;
       return;
    }
-   data.Audio && data.Audio.stop();
-   data.onPlay = true;
-   if (type !== data.type) {
-      // clearData(app);
-      data.type = type;
-      data.audioList = getAudioList(type);
+   state.Audio && state.Audio.pause();
+   state.onPlay = true;
+   if (params.type !== state.type) {
+      // clearstate(app);
+      state.type = params.type;
+      state.audioList = getAudioList(params.type);
       _();
    } else {
       //如果只是索引改了
-      if (index !== data.index) {
+      if (params.index !== state.index) {
          _();
       }
    }
    function _() {
-      data.index = index;
-      data.currAudio = data.audioList[index];
-      data.url = data.currAudio[0].url;
-      data.url && (data.Audio.src = data.url);
-
+      state.index = params.index;
+      state.currAudio = state.audioList[params.index];
+      state.url = state.currAudio[0].url;
+      state.Audio.src = state.url || '';
    }
 }
 const switchToPlay = function (e) {
    let dataset = e.currentTarget.dataset;
-   console.log('switchToPlay');
-   console.log(dataset.audioIndex);
-   console.log(dataset.audioType);
-   let url = articleZH[dataset.audioIndex][0].url;
-   this.$store.commit("setAudioSrc", {
+   this.$store.commit("RESET_DATA", {
       type: dataset.audioType,
       index: dataset.audioIndex
    });
-
-
-   /*
-   resetData(dataset.audioType, dataset.audioIndex);
-   if (app.data.url) {
-      app.data.Audio.play();
-   }
-   wx.switchTab({
-      url: '/pages/play/play',
-   })
-   */
+   setTimeout(function () {
+      this.$store.getters.Audio.play();
+   }.bind(this), 100);
+   this.$router.push({ path: '/play' })
 }
-const playControl = () => {
-   let app = getApp();
-   if (app.data.onPlay) {
-      app.data.Audio.pause();
-      app.data.onPlay = false;
-   } else {
-      wx.showLoading({
-         title: '音频加载中...'
+const playControl = function (e) {
+   let dataset = e.currentTarget.dataset;
+   if (dataset.audioType && dataset.audioType != this.audioType || dataset.audioIndex && dataset.audioIndex != this.index) {
+      this.$store.commit("RESET_DATA", {
+         type: dataset.audioType,
+         index: dataset.audioIndex
       });
-      if (wx.getStorageSync('ended')) {
-         app.data.Audio = wx.getBackgroundAudioManager();
-         wx.removeStorageSync('ended')
-         app.data.Audio.src = app.data.url;
-         app.data.Audio.play()
-      }
-      if (app.data.url && app.data.Audio.src != app.data.url) {
-         app.data.Audio.src = app.data.url;
-      }
+      setTimeout(function () {
+         this.$store.getters.Audio.play();
+      }.bind(this), 100);
+      return;
+   }
+   if (this.$store.getters.onPlay) {
+      this.$store.getters.Audio.pause();
+      this.$store.commit("SET_ONPLAY", false);
+   } else {
+      /*
+       if (wx.getStorageSync('ended')) {
+          app.data.Audio = wx.getBackgroundAudioManager();
+          wx.removeStorageSync('ended')
+          app.data.Audio.src = app.data.url;
+          app.data.Audio.play()
+       }
+       if (app.data.url && app.data.Audio.src != app.data.url) {
+          app.data.Audio.src = app.data.url;
+       }
+       */
+      this.$store.commit("SET_ONPLAY", true);
 
-      app.data.Audio.src && app.data.Audio.play();
+      setTimeout(function () {
+         console.log('paly');
+         this.$store.getters.Audio.play();
+      }.bind(this), 100);
    }
 }
 const keepPlay = app => {
@@ -175,7 +167,7 @@ const setAudioEvent = (app, that) => {
    }
    let appData = app.data;
    let Audio = app.data.Audio;
-   Audio.onPlay(() => {
+   Audio.onplay(() => {
       console.log('onPlay');
       wx.hideLoading();
       wx.removeStorageSync('ended');
@@ -234,7 +226,7 @@ const setAudioEvent = (app, that) => {
 		});
 		*/
    });
-   Audio.onEnded(() => {
+   Audio.onended(() => {
       console.log('ended');
       wx.hideLoading();
       if (data) {

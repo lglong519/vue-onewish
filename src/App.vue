@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     changePath(path) {
-      this.$store.commit("changePath", path);
+      this.$store.commit("SET_PATH", path);
     }
   },
   beforeCreate() {
@@ -35,7 +35,7 @@ export default {
   },
   mounted() {
     console.log("  app", "mounted");
-    this.$store.commit("getAudio", document.getElementById("audio"));
+    this.$store.commit("SET_AUDIO", document.getElementById("audio"));
   },
   beforeUpdate() {
     console.log("  app", "beforeUpdate");

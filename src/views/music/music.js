@@ -1,29 +1,31 @@
 //index.js
-// import { switchToPlay } from '../../utils/funs.js';
-import classical from '../../../static/libs/classical'
-import music from '../../../static/libs/music'
+import Funs from '../../utils/funs';
 const audioList = {
-  classical,
-  music
+  classical: Funs.classical,
+  music: Funs.music
 }
 
 export default {
   data() {
     return {
       audioList: Array,
-      index: Number,
-      onPlay: Boolean,
       audioType: String
     }
   },
   computed: {
-
+    onPlay() {
+      return this.$store.getters.onPlay;
+    },
+    type() {
+      return this.$store.getters.type;
+    },
+    index() {
+      return this.$store.getters.index;
+    }
   },
   methods: {
-    switchToPlay() {
-    },
-    playControl() {
-    },
+    switchToPlay: Funs.switchToPlay,
+    playControl: Funs.playControl,
     updateAudioList() {
       this.audioType = localStorage.getItem('musicType');
       this.audioList = audioList[this.audioType];
@@ -68,20 +70,9 @@ Page({
   },
   switchToPlay: app.Funs.switchToPlay,
   onShow: function () {
-    this.setData({
-      audioType: localStorage.getItem('audioType') == 'music' && 'music' || 'classical'
-    });
-    wx.setTabBarStyle({
-      selectedColor: '#8a635c',
-    });
-    wx.setNavigationBarColor({
-      frontColor: '#ffffff',
-      backgroundColor: localStorage.getItem('audioType') == 'music' ? '#514e5a' : '#8a635c',
-      animation: {
-        duration: 400,
-        timingFunc: 'easeIn'
-      }
-    })
+    
+   
+   
     this.setData({
       audioList: localStorage.getItem('audioType') == 'music' ? app.Funs.music : app.Funs.classical,
       type: app.data.type,

@@ -9,8 +9,6 @@ const state = {
    currAudio: null,
    onPlay: false,
    playMode: null,
-   timer: null,
-   audioBackstage: null,
    playModeLib: {
       index: { 'once': 0, 'loop': 1, 'list': 2, 'listLoop': 3, 'randomList': 4, 'randomInfinite': 5, 'randomAll': 6 },
       list: ['sync_disabled', 'repeat_one', 'format_list_numbered', 'low_priority', 'wrap_text', 'format_line_spacing', 'crop_rotate'],
