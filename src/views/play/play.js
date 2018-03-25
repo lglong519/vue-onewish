@@ -15,7 +15,7 @@ export default {
 			currentTime: 0,
 			currentTimeFormat: '00:00',
 			timeStamp: 0,
-			duration: Audio.duration,
+			duration: 0,
 			durationFormat: '00:00',
 			windowHeight: 0,
 			id: null,
@@ -65,6 +65,13 @@ export default {
 	},
 	methods: {
 		playControl: Funs.playControl,
+		sliderChange(val) {
+			this.Audio.currentTime = val;
+			this.timeStamp = 0;
+		},
+		sliderChanging(val) {
+			this.timeStamp = val
+		}
 
 	},
 	activated() {
@@ -80,7 +87,6 @@ export default {
 		var i = 0;
 		var that = this;
 		let Audio = this.Audio;
-
 		setInterval(() => {
 			if (!Audio.src || !this.$store.getters.url || !this.show) { return }
 

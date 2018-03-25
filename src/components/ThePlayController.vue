@@ -2,10 +2,11 @@
 	<!--音乐控制器 -->
 	
 	<div v-if='currAudio[0].url' class='playcontroller' :class='{"hide":hide ,"show":data.show ,"bg-transparent":type !=="articleZH" && type !=="articleEN", "rollup":rollup}'>
-		<div v-if='!rollup' class='flex-row'>
-			<div class='text-white pt-3 pl-2'>{{data.currentTimeFormat}}</div>
+		<div v-if='!rollup' class='flex-row align-center pt-2 pb-1'>
+			<div class='text-white pl-2 mr-2'>{{data.currentTimeFormat}}</div>
 			 <!-- <slider class='flex' bindchange="sliderChange" bindchanging='sliderChanging' value="{{currentTime}}" max='{{duration}}' block-size='12' activeColor='#5287E9' block-color='#FDE0E9' /> -->
-			<div class='text-white pt-3 pr-2'>{{data.durationFormat}}</div>
+       <input type="range" name="slider" id="slider" class="flex" :style="'background: linear-gradient(to right, #059cfa '+range+'%, white '+range+'%) no-repeat;'" min='0' :max="data.duration" v-model="data.currentTime" @input="sliderChanging()" @change="sliderChange()">
+			<div class='text-white pr-2  ml-2'>{{data.durationFormat}}</div>
 		</div>
 		<div class='text-center play-btn flex-row align-center'>
 			<div class='aside pl-2'>
@@ -48,6 +49,9 @@ export default {
     },
     Audio() {
       return this.$store.getters.Audio;
+    },
+    range() {
+      return this.data.currentTime / this.data.duration * 100;
     }
   },
   methods: {
@@ -61,6 +65,14 @@ export default {
     },
     playForward() {
       this.Audio.currentTime = this.data.currentTime + 5;
+    },
+    sliderChanging() {
+      console.log("Changing");
+      this.$emit("sliderChanging", 1);
+    },
+    sliderChange() {
+      console.log("changed");
+      this.$emit("sliderChange", this.data.currentTime);
     }
   },
   activated() {
@@ -84,6 +96,29 @@ export default {
   }
   &.bg-transparent {
     background-color: transparent;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    border-radius: 10px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 1.5px;
+    // background-color: white;
+    // #5287E9
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 10px;
+    width: 10px;
+    margin-top: -4px;
+    background: #fde0e9;
+    border-radius: 50%;
   }
 }
 .play-btn {
