@@ -39,19 +39,21 @@ const init = (state) => {
 
 
 //重置所有数据
-const resetData = (state, params) => {
+const resetData = (store, params) => {
+   let state = store.state;
    localStorage.setItem('type', params.type);
    localStorage.setItem('index', params.index);
    if (params.type === state.type && params.index === state.index) {
-      state.onPlay = true;
+      store.commit('SET_ONPLAY', true);
       return;
    }
    state.Audio && state.Audio.pause();
-   state.onPlay = true;
+   store.commit('SET_ONPLAY', true);
    if (params.type !== state.type) {
       // clearstate(app);
-      state.type = params.type;
-      state.audioList = getAudioList(params.type);
+      store.commit('SET_TYPE', params.type);
+      store.commit('SET_AUDIOLIST', getAudioList(params.type));
+
       _();
    } else {
       //如果只是索引改了
@@ -60,10 +62,11 @@ const resetData = (state, params) => {
       }
    }
    function _() {
-      state.index = params.index;
-      state.currAudio = state.audioList[params.index];
-      state.url = state.currAudio[0].url;
+      store.commit('SET_INDEX', params.index);
+      store.commit('SET_CURRAUDIO', state.audioList[params.index]);
+      store.commit('SET_URL', tate.currAudio[0].url);
       state.Audio.src = state.url || '';
+      state.Audio.load();
    }
 }
 const switchToPlay = function (e) {
@@ -94,9 +97,9 @@ const playControl = function (e) {
       this.$store.commit("SET_ONPLAY", false);
    } else {
       /*
-       if (wx.getStorageSync('ended')) {
+       if (localStorage.getItem('ended')) {
           app.data.Audio = wx.getBackgroundAudioManager();
-          wx.removeStorageSync('ended')
+          localStorage.removeItem('ended')
           app.data.Audio.src = app.data.url;
           app.data.Audio.play()
        }
@@ -160,171 +163,117 @@ const showRedDot = (app) => {
    }, 100);
 }
 
-const setAudioEvent = (app, that) => {
-   let data;
-   if (that) {
-      data = that.data
-   }
-   let appData = app.data;
-   let Audio = app.data.Audio;
-   Audio.onplay(() => {
+const setAudioEvent = that => {
+
+   let appData = that.$store.getters;
+   let Audio = appData.Audio;
+   Audio.onplay = () => {
       console.log('onPlay');
-      wx.hideLoading();
-      wx.removeStorageSync('ended');
+      localStorage.removeItem('ended');
       if (!appData.url) { return }
-      createRandomIndex();
-      appData.onPlay = true;
-      if (!data) { return }
-      that.setData({
-         onPlay: true
-      });
-   });
+      createRandomIndex(appData);
+      that.$store.commit('SET_ONPLAY', true);
+   };
 
-   if (!data) {
-      if (!appData.audioBackstage) {
-         Audio.onSeeking(() => {
-            console.log('onSeeking');
-            wx.showLoading();
-         });
-         Audio.onSeeked(() => {
-            console.log('onSeeked');
-            wx.hideLoading();
-            if (appData.onPlay) {
-               Audio.pause();
-            }
-            if (appData.url) {
-               Audio.play();
-            }
-         });
+   Audio.onSeeking = () => {
+      console.log('onSeeking');
+   };
+   Audio.onSeeked = () => {
+      console.log('onSeeked');
+      if (appData.url) {
+         Audio.play();
       }
-      Audio.onError((err) => {
-         console.log('onError', err);
-         Audio.pause();
-      });
-   }
+   };
+   Audio.onerror = (err) => {
+      console.log('onError', err);
+      Audio.pause();
+   };
 
-   Audio.onPause(() => {
+   Audio.onpause = () => {
       console.log('onPause');
-      wx.hideLoading();
-      if (appData.audioBackstage) {
-         appData.onPlay = false;
-      }
-      if (!data) { return }
-      that.setData({
-         onPlay: false
-      });
-   });
-   Audio.onStop(() => {
-      console.log('onStop');
-      wx.hideLoading();
-      localStorage.setItem('ended', true);
-		/*
-		appData.onPlay = false;
-		if (!data) { return }
-		that.setData({
-			onPlay: false
-		});
-		*/
-   });
-   Audio.onended(() => {
+      that.$store.commit('SET_ONPLAY', false);
+   };
+
+   Audio.onended = () => {
       console.log('ended');
-      wx.hideLoading();
-      if (data) {
-         that.setData({
-            onPlay: false
-         });
+      that.$store.commit('SET_ONPLAY', false);
+      localStorage.setItem('ended', true);
+      let playMode = localStorage.getItem('playMode');
+      if (playMode == 'loop') {
+         appData.Audio.play();
       }
-      var bool = false;
-      if (appData.audioBackstage) {
-         localStorage.setItem('ended', true);
-         bool = true;
-      } else {
-         if (data) {
-            bool = false;
+
+      if (playMode == 'list') {
+         if (appData.index < appData.audioList.length - 1) {
+            let newIndex = appData.index + 1;
+            resetData(that.$store, {
+               type: appData.type,
+               index: newIndex
+            });
+            if (appData.url) {
+               appData.Audio.play();
+            }
+         }
+      }
+
+      if (playMode == 'listLoop') {
+         let newIndex
+         if (appData.index < appData.audioList.length - 1) {
+            newIndex = appData.index + 1;
          } else {
-            bool = true;
+            newIndex = 0;
+         }
+         resetData(that.$store, {
+            type: appData.type,
+            index: newIndex
+         });
+         if (appData.url) {
+            appData.Audio.play();
          }
       }
-      if (bool) {
-         appData.onPlay = false;
-         let playMode = wx.getStorageSync('playMode');
-         if (playMode == 'loop') {
-            if (appData.url) {
-               appData.Audio.src = appData.url;
-               appData.Audio.play();
-            }
-         }
 
-         if (playMode == 'list') {
-            if (appData.index < appData.audioList.length - 1) {
-               let newIndex = appData.index + 1;
-               resetData(appData.type, newIndex);
-               appData.onPlay = true;
-               if (appData.url) {
-                  appData.Audio.play();
-               }
-               app.data.onShow();
-            }
-         }
-
-         if (playMode == 'listLoop') {
-            let newIndex
-            if (appData.index < appData.audioList.length - 1) {
-               newIndex = appData.index + 1;
-            } else {
-               newIndex = 0;
-            }
-            resetData(appData.type, newIndex);
+      if (playMode == 'randomList') {
+         let list = localStorage.getItem('randomList') || [];;
+         list && list.shift();
+         if (list.length) {
+            localStorage.setItem('randomList', list);
+            resetData(that.$store, {
+               type: appData.type,
+               index: list[0]
+            });
             if (appData.url) {
                appData.Audio.play();
             }
-            app.data.onShow();
-         }
-
-         if (playMode == 'randomList') {
-            let list = wx.getStorageSync('randomList') || [];;
-            list && list.shift();
-            if (list.length) {
-               localStorage.setItem('randomList', list);
-               resetData(appData.type, list[0]);
-               if (appData.url) {
-                  appData.Audio.play();
-               }
-               app.data.onShow();
-            } else {
-               wx.removeStorageSync('randomList');
-            }
-         }
-
-         if (playMode == 'randomInfinite') {
-            let newIndex = parseInt(Math.random() * appData.audioList.length);
-            resetData(appData.type, newIndex);
-            if (appData.url) {
-               appData.Audio.play();
-            }
-            app.data.onShow();
-         }
-         if (playMode == 'randomAll') {
-            let types = ['articleZH', 'articleEN', 'classical', 'music'];
-            let typeIndex = parseInt(Math.random() * types.length);
-            appData.audioList = getAudioList(types[typeIndex]);
-            let newIndex = parseInt(Math.random() * appData.audioList.length);
-            resetData(types[typeIndex], newIndex);
-            if (appData.url) {
-               appData.Audio.play();
-            }
-            app.data.onShow();
+         } else {
+            localStorage.removeItem('randomList');
          }
       }
-   });
-   if (appData.audioBackstage) {
-      Audio.onPrev(() => {
-         skip_previous(that, app);
-      });
-      Audio.onNext(() => {
-         skip_next(that, app);
-      });
-   }
+
+      if (playMode == 'randomInfinite') {
+         let newIndex = parseInt(Math.random() * appData.audioList.length);
+         resetData(that.$store, {
+            type: appData.type,
+            index: newIndex
+         });
+         if (appData.url) {
+            appData.Audio.play();
+         }
+      }
+      if (playMode == 'randomAll') {
+         let types = ['articleZH', 'articleEN', 'classical', 'music'];
+         let typeIndex = parseInt(Math.random() * types.length);
+         appData.audioList = getAudioList(types[typeIndex]);
+         let newIndex = parseInt(Math.random() * appData.audioList.length);
+         resetData(that.$store, {
+            type: types[typeIndex],
+            index: newIndex
+         });
+         if (appData.url) {
+            appData.Audio.play();
+         }
+      }
+   };
+
 }
 const skip_previous = (that, app) => {
    var newIndex;
@@ -396,10 +345,10 @@ const getCurrPart = (sectionTime, currentTime) => {
    }
    return '00:00'
 }
-const createRandomIndex = () => {
-   let appData = getApp().data
-   if (wx.getStorageSync('playMode') == 'randomList') {
-      if (!wx.getStorageSync('randomList')) {
+const createRandomIndex = getters => {
+   let appData = getters;
+   if (localStorage.getItem('playMode') == 'randomList') {
+      if (!localStorage.getItem('randomList')) {
          let count = appData.audioList.length - 1;
          let initNo = [];
          while (count >= 0) {
