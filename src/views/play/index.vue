@@ -16,8 +16,8 @@
 						<div class="weui-article__title text-orange-3 text-18 mb-2">
 							{{art.title}}
 							<template v-if='currAudio[0].url'>
-								<i v-if='onPlay' class='material-icons text-blue-0' bindtap='playControl' :data-art-time='art.time'>volume_up</i>
-								<i v-else class='material-icons text-grey-1' bindtap='playControl' :data-art-time='art.time'>volume_down</i>
+								<i v-if='onPlay' class='material-icons text-blue-0' @click='playControl' :data-art-time='art.time'>volume_up</i>
+								<i v-else class='material-icons text-grey-1' @click='playControl' :data-art-time='art.time'>volume_down</i>
 							</template>
 						</div>
 						<!--内容  -->
@@ -25,7 +25,7 @@
 							<!--时间  -->
 							<div v-if='item.time' :id='currPart==item.time? "currentPart":""' class='weui-article__h3' :class='currPart==item.time && onPlay?"text-blue-2":"text-grey-6"'>
 								{{item.time}}
-								<i class='material-icons' :class='currPart==item.time && onPlay?"text-green-0":"text-grey-1"' bindtap='playSection' :data-art-id='art.id'
+								<i class='material-icons' :class='currPart==item.time && onPlay?"text-green-0":"text-grey-1"' @click='playSection' :data-art-id='art.id'
 								 :data-art-url='art.url' :data-art-time='item.time'>{{currPart==item.time && onPlay && currentTimeFormat[4]%2==0 ?"volume_mute":"volume_down"}}</i>
 							</div>
 							<!--文本  -->

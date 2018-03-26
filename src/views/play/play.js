@@ -1,6 +1,6 @@
 import Funs from '../../utils/funs';
 import ThePlayController from "../../components/ThePlayController";
-console.log('ThePlayController', ThePlayController);
+
 let toMinute = Funs.toMinute;
 let toSecond = Funs.toSecond;
 let getCurrPart = Funs.getCurrPart;
@@ -71,8 +71,16 @@ export default {
 		},
 		sliderChanging(val) {
 			this.timeStamp = val
+		},
+		playSection(e) {
+			var dataset = e.currentTarget.dataset;
+			if (dataset.artTime) {
+				var sec = toSecond(dataset.artTime);
+				this.Audio.play();
+				this.Audio.currentTime = sec || 0;
+				this.$store.commit('SET_ONPLAY', true);
+			}
 		}
-
 	},
 	activated() {
 		console.log('play', "activated");
@@ -217,22 +225,7 @@ Page({
 		}, 100);
 	},
 	playControl: app.Funs.playControl,
-	playSection(e) {
-		var dataset = e.currentTarget.dataset;
-		if (dataset.artTime) {
-			var sec = toSecond(dataset.artTime);
-		}
-		this.setData({
-			currArt: dataset.artTime,
-			onPlay: true
-		});
-		Audio.seek(sec || 0);
-	},
-	toSection() {
-		this.setData({
-			id: "currentPart"
-		});
-	},
+	
 	zoom() {
 		if (this.data.hideTabBar) {
 			wx.showTabBar({
@@ -343,7 +336,7 @@ Page({
 			});
 		}, 2000);
 		localStorage.setItem('playMode', appData.playModeLib.mode[this.data.modeIndex]);
-		wx.removeStorageSync('randomList');
+		localStorage.removeItem('randomList');
 		if (this.data.onPlay) {
 			app.Funs.createRandomIndex();
 		}
