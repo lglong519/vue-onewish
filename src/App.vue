@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import Funs from "./utils/funs";
 export default {
   name: "App",
   computed: {
@@ -36,6 +37,7 @@ export default {
   mounted() {
     console.log("  app", "mounted");
     this.$store.commit("SET_AUDIO", document.getElementById("audio"));
+    Funs.setAudioEvent(this);
   },
   beforeUpdate() {
     console.log("  app", "beforeUpdate");

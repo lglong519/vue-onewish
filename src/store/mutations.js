@@ -10,5 +10,17 @@ export default {
    SET_ONPLAY(state, onPlay) {
       state.onPlay = onPlay;
    },
+   SET_TYPE(state, type) {
+      state.type = type;
+   },
+   SET_INDEX(state, index) {
+      state.index = index;
+   },
+   SET_CURRAUDIO(state, currAudio) {
+      state.currAudio = currAudio;
+   },
+   SET_URL(state, url) {
+      state.url = url;
+   },
    RESET_DATA: Funs.resetData
 }

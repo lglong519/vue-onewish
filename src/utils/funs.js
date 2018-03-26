@@ -39,21 +39,19 @@ const init = (state) => {
 
 
 //重置所有数据
-const resetData = (store, params) => {
-   let state = store.state;
+const resetData = (state, params) => {
    localStorage.setItem('type', params.type);
    localStorage.setItem('index', params.index);
    if (params.type === state.type && params.index === state.index) {
-      store.commit('SET_ONPLAY', true);
+      state.onPlay = true;
       return;
    }
    state.Audio && state.Audio.pause();
-   store.commit('SET_ONPLAY', true);
+   state.onPlay = true;
    if (params.type !== state.type) {
       // clearstate(app);
-      store.commit('SET_TYPE', params.type);
-      store.commit('SET_AUDIOLIST', getAudioList(params.type));
-
+      state.type = params.type;
+      state.audioList = getAudioList(params.type);
       _();
    } else {
       //如果只是索引改了
@@ -62,11 +60,10 @@ const resetData = (store, params) => {
       }
    }
    function _() {
-      store.commit('SET_INDEX', params.index);
-      store.commit('SET_CURRAUDIO', state.audioList[params.index]);
-      store.commit('SET_URL', tate.currAudio[0].url);
+      state.index = params.index;
+      state.currAudio = state.audioList[params.index];
+      state.url = state.currAudio[0].url;
       state.Audio.src = state.url || '';
-      state.Audio.load();
    }
 }
 const switchToPlay = function (e) {
@@ -206,7 +203,7 @@ const setAudioEvent = that => {
       if (playMode == 'list') {
          if (appData.index < appData.audioList.length - 1) {
             let newIndex = appData.index + 1;
-            resetData(that.$store, {
+            that.$store.commit('RESET_DATA', {
                type: appData.type,
                index: newIndex
             });
@@ -223,7 +220,7 @@ const setAudioEvent = that => {
          } else {
             newIndex = 0;
          }
-         resetData(that.$store, {
+         that.$store.commit('RESET_DATA', {
             type: appData.type,
             index: newIndex
          });
@@ -237,7 +234,7 @@ const setAudioEvent = that => {
          list && list.shift();
          if (list.length) {
             localStorage.setItem('randomList', list);
-            resetData(that.$store, {
+            that.$store.commit('RESET_DATA', {
                type: appData.type,
                index: list[0]
             });
@@ -251,7 +248,7 @@ const setAudioEvent = that => {
 
       if (playMode == 'randomInfinite') {
          let newIndex = parseInt(Math.random() * appData.audioList.length);
-         resetData(that.$store, {
+         that.$store.commit('RESET_DATA', {
             type: appData.type,
             index: newIndex
          });
@@ -264,7 +261,7 @@ const setAudioEvent = that => {
          let typeIndex = parseInt(Math.random() * types.length);
          appData.audioList = getAudioList(types[typeIndex]);
          let newIndex = parseInt(Math.random() * appData.audioList.length);
-         resetData(that.$store, {
+         that.$store.commit('RESET_DATA', {
             type: types[typeIndex],
             index: newIndex
          });
