@@ -80,6 +80,12 @@ export default {
 				this.Audio.currentTime = sec || 0;
 				this.$store.commit('SET_ONPLAY', true);
 			}
+		},
+		showToastEvent(bool) {
+			this.showToast = bool
+		},
+		modeIndexEvent(modeIndex) {
+			this.modeIndex = modeIndex
 		}
 	},
 	activated() {
@@ -318,29 +324,7 @@ Page({
 	skip_next() {
 		app.Funs.skip_next(this, app);
 	},
-	playModeChange() {
-		this.data.modeTimer && clearTimeout(this.data.modeTimer);
-		if (this.data.modeIndex < appData.playModeLib.list.length - 1) {
-			this.data.modeIndex++;
-		} else {
-			this.data.modeIndex = 0;
-		}
-		this.setData({
-			modeIndex: this.data.modeIndex,
-			showToast: true
-		});
-		var that = this;
-		this.data.modeTimer = setTimeout(() => {
-			that.setData({
-				showToast: false
-			});
-		}, 2000);
-		localStorage.setItem('playMode', appData.playModeLib.mode[this.data.modeIndex]);
-		localStorage.removeItem('randomList');
-		if (this.data.onPlay) {
-			app.Funs.createRandomIndex();
-		}
-	},
+	
 	
 	showTrans(e) {
 		var dataset = e.currentTarget.dataset;

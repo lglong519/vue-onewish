@@ -10,7 +10,7 @@
 		</div>
 		<div class='text-center play-btn flex-row align-center'>
 			<div class='aside pl-2'>
-				<i class='material-icons text-24 text-grey' bindtap='playModeChange'>{{data.modeIcon[data.modeIndex]}}</i>
+				<i class='material-icons text-24 text-grey' @click='playModeChange'>{{data.modeIcon[data.modeIndex]}}</i>
 			</div>
 			<div class='flex flex-row align-center justify-center'>
 				<i class='material-icons text-40' bindtap='skip_previous'>skip_previous</i>
@@ -34,7 +34,8 @@ export default {
   data() {
     return {
       hide: false,
-      rollup: false
+      rollup: false,
+      modeTimer: null
     };
   },
   computed: {
@@ -52,6 +53,9 @@ export default {
     },
     range() {
       return this.data.currentTime / this.data.duration * 100;
+    },
+    playModeLib() {
+      return this.$store.getters.playModeLib;
     }
   },
   methods: {
@@ -73,6 +77,29 @@ export default {
     sliderChange() {
       console.log("changed");
       this.$emit("sliderChange", this.data.currentTime);
+    },
+    playModeChange() {
+      this.modeTimer && clearTimeout(this.modeTimer);
+      if (this.data.modeIndex < this.playModeLib.list.length - 1) {
+        var index = this.data.modeIndex + 1;
+      } else {
+        var index = 0;
+      }
+
+      this.$emit("modeIndexEvent", index);
+      this.$emit("showToastEvent", true);
+
+      this.modeTimer = setTimeout(() => {
+        this.$emit("showToastEvent", false);
+      }, 2000);
+      localStorage.setItem(
+        "playMode",
+        this.playModeLib.mode[this.data.modeIndex]
+      );
+      localStorage.removeItem("randomList");
+      if (this.onPlay) {
+        Funs.createRandomIndex(this.$store.getters);
+      }
     }
   },
   activated() {

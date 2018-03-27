@@ -107,7 +107,6 @@ const playControl = function (e) {
       this.$store.commit("SET_ONPLAY", true);
 
       setTimeout(function () {
-         console.log('paly');
          this.$store.getters.Audio.play();
       }.bind(this), 100);
    }
@@ -208,7 +207,9 @@ const setAudioEvent = that => {
                index: newIndex
             });
             if (appData.url) {
-               appData.Audio.play();
+               setTimeout(function () {
+                  appData.Audio.play();
+               }, 100);
             }
          }
       }
@@ -216,7 +217,7 @@ const setAudioEvent = that => {
       if (playMode == 'listLoop') {
          let newIndex
          if (appData.index < appData.audioList.length - 1) {
-            newIndex = appData.index + 1;
+            newIndex = appData.index * 1 + 1;
          } else {
             newIndex = 0;
          }
@@ -225,21 +226,26 @@ const setAudioEvent = that => {
             index: newIndex
          });
          if (appData.url) {
-            appData.Audio.play();
+            setTimeout(function () {
+               appData.Audio.play();
+            }, 100);
          }
       }
 
       if (playMode == 'randomList') {
-         let list = localStorage.getItem('randomList') || [];;
+         let list = JSON.parse(localStorage.getItem('randomList')) || [];
          list && list.shift();
          if (list.length) {
-            localStorage.setItem('randomList', list);
+            localStorage.setItem('randomList', JSON.stringify(list));
             that.$store.commit('RESET_DATA', {
                type: appData.type,
                index: list[0]
             });
             if (appData.url) {
-               appData.Audio.play();
+               setTimeout(function () {
+                  appData.Audio.play();
+               }, 100);
+
             }
          } else {
             localStorage.removeItem('randomList');
@@ -360,7 +366,7 @@ const createRandomIndex = getters => {
             }
          })();
          randomList.unshift(appData.index);
-         localStorage.setItem('randomList', randomList);
+         localStorage.setItem('randomList', JSON.stringify(randomList));
       }
    }
 }

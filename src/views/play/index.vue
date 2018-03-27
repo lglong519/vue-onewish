@@ -62,7 +62,7 @@
 		<div v-if='showToast' class='playmode-toast'>
 			<div class='mode-name'>{{modeName[modeIndex]}}</div>
 		</div>
-		<ThePlayController @sliderChange='sliderChange' @sliderChanging='sliderChanging' :data='{currentTime,show,currentTimeFormat,durationFormat,duration,modeIcon,modeIndex}'></ThePlayController>
+		<ThePlayController @showToastEvent='showToastEvent' @modeIndexEvent='modeIndexEvent' @sliderChange='sliderChange' @sliderChanging='sliderChanging' :data='{currentTime,show,currentTimeFormat,durationFormat,duration,modeIcon,modeIndex}'></ThePlayController>
 	</div>
 </template>
 
