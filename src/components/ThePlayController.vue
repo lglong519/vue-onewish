@@ -92,10 +92,7 @@ export default {
       this.modeTimer = setTimeout(() => {
         this.$emit("showToastEvent", false);
       }, 2000);
-      localStorage.setItem(
-        "playMode",
-        this.playModeLib.mode[this.data.modeIndex]
-      );
+      localStorage.setItem("playMode", this.playModeLib.mode[index]);
       localStorage.removeItem("randomList");
       if (this.onPlay) {
         Funs.createRandomIndex(this.$store.getters);

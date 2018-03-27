@@ -3,21 +3,21 @@ let app = getApp();
 Page({
 	data: {
 		userInfo: null,
-		playMode: app.data.modeIcon.mode,
-		mode: app.data.modeIcon.name,
-		modeIcon: app.data.modeIcon.list,
+		playMode: app.data.playModeLib.mode,
+		mode: app.data.playModeLib.name,
+		modeIcon: app.data.playModeLib.list,
 		index: 0,
 		audioBackstage: null,
-		hideTabBar: wx.getStorageSync('hideTabBar') || false,
-		showAnchor: wx.getStorageSync('showAnchor'),
-		showZoom: wx.getStorageSync('showZoom')
+		hideTabBar: localStorage.getItem('hideTabBar') || false,
+		showAnchor: localStorage.getItem('showAnchor'),
+		showZoom: localStorage.getItem('showZoom')
 	},
 	audioBackstageChange(e) {
 		app = getApp();
 		this.setData({
 			audioBackstage: e.detail.value
 		})
-		wx.setStorageSync('audioBackstage', e.detail.value);
+		localStorage.setItem('audioBackstage', e.detail.value);
 		let playStatus = app.data.onPlay;
 		let currentTime = app.data.Audio.currentTime;
 		let audioSrc;
@@ -59,19 +59,19 @@ Page({
 		this.setData({
 			hideTabBar: e.detail.value
 		})
-		wx.setStorageSync('hideTabBar', e.detail.value);
+		localStorage.setItem('hideTabBar', e.detail.value);
 	},
 	showAnchor(e) {
 		this.setData({
 			showAnchor: e.detail.value
 		})
-		wx.setStorageSync('showAnchor', e.detail.value);
+		localStorage.setItem('showAnchor', e.detail.value);
 	},
 	showZoom(e) {
 		this.setData({
 			showZoom: e.detail.value
 		})
-		wx.setStorageSync('showZoom', e.detail.value);
+		localStorage.setItem('showZoom', e.detail.value);
 	},
 	previewImage() {
 		wx.previewImage({
@@ -83,8 +83,8 @@ Page({
 			index: e.detail.value
 		})
 		var that = this;
-		wx.setStorageSync('playMode', that.data.playMode[that.data.index]);
-		wx.removeStorageSync('randomList');
+		localStorage.setItem('playMode', that.data.playMode[that.data.index]);
+		localStorage.removeItem('randomList');
 		if (app.data.onPlay) {
 			app.Funs.createRandomIndex();
 		}
@@ -99,7 +99,7 @@ Page({
 						complete(res) {
 							if (res.authSetting['scope.userInfo']) {
 							} else {
-								wx.removeStorageSync('userInfo')
+								localStorage.removeItem('userInfo')
 								app.data.userInfo = null;
 								that.setData({
 									userInfo: null
@@ -121,8 +121,8 @@ Page({
 			selectedColor: '#5287E9',
 		});
 		this.setData({
-			audioBackstage: wx.getStorageSync('audioBackstage'),
-			index: app.data.modeIcon.index[wx.getStorageSync('playMode')]
+			audioBackstage: localStorage.getItem('audioBackstage'),
+			index: app.data.playModeLib.index[localStorage.getItem('playMode')]
 		})
 		if (app.data.userInfo) {
 			this.setData({

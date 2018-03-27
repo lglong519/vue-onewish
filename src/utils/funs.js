@@ -165,7 +165,6 @@ const setAudioEvent = that => {
    let Audio = appData.Audio;
    Audio.onplay = () => {
       console.log('onPlay');
-      localStorage.removeItem('ended');
       if (!appData.url) { return }
       createRandomIndex(appData);
       that.$store.commit('SET_ONPLAY', true);
@@ -193,7 +192,6 @@ const setAudioEvent = that => {
    Audio.onended = () => {
       console.log('ended');
       that.$store.commit('SET_ONPLAY', false);
-      localStorage.setItem('ended', true);
       let playMode = localStorage.getItem('playMode');
       if (playMode == 'loop') {
          appData.Audio.play();
