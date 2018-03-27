@@ -199,7 +199,7 @@ const setAudioEvent = that => {
 
       if (playMode == 'list') {
          if (appData.index < appData.audioList.length - 1) {
-            let newIndex = appData.index + 1;
+            let newIndex = appData.index * 1 + 1;
             that.$store.commit('RESET_DATA', {
                type: appData.type,
                index: newIndex
@@ -291,7 +291,7 @@ const skip_next = (that, app) => {
    var newIndex;
    let appData = app.data;
    if (appData.index < appData.audioList.length - 1) {
-      newIndex = appData.index + 1;
+      newIndex = appData.index * 1 + 1;
    } else {
       newIndex = 0;
    }

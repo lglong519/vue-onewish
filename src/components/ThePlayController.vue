@@ -81,7 +81,7 @@ export default {
     playModeChange() {
       this.modeTimer && clearTimeout(this.modeTimer);
       if (this.data.modeIndex < this.playModeLib.list.length - 1) {
-        var index = this.data.modeIndex + 1;
+        var index = this.data.modeIndex * 1 + 1;
       } else {
         var index = 0;
       }
