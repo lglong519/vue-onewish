@@ -1,7 +1,7 @@
 <template>
 	<div class="play">
 		<i v-if='showZoom' class='material-icons text-30 text-grey zoom' :class='{"text-white":type !=="articleZH" && type !=="articleEN"}'
-		 bindtap='zoom'>{{hideTabBar?"select_all":"zoom_out_map"}}</i>
+		 @click='zoom'>{{hideTabBar?"select_all":"zoom_out_map"}}</i>
 
 		<!--文章  -->
 		<div class="page" v-if='type=="articleZH" || type=="articleEN"'>
@@ -21,7 +21,7 @@
 							</template>
 						</div>
 						<!--内容  -->
-						<div class="weui-article__section mb-2" v-for='(item,j) in art.sections' :key='item.time'>
+						<div class="weui-article__section mb-2" v-for='(item,j) in art.sections' :key='j'>
 							<!--时间  -->
 							<div v-if='item.time' :id='currPart==item.time? "currentPart":""' class='weui-article__h3' :class='currPart==item.time && onPlay?"text-blue-2":"text-grey-6"'>
 								{{item.time}}
@@ -35,7 +35,7 @@
 
 							<!--译文  -->
 							<template v-if='item.trans'>
-								<div class='weui-article__h3 text-blue-3 flex-row align-center' bindtap='showTrans' :data-show-trans-index='j'>
+								<div class='weui-article__h3 text-blue-3 flex-row align-center' @click='showTransition' :data-show-trans-index='j'>
 									<i class='material-icons'>g_translate</i>
 									<text class='trans-down ml-1' :class='{"trans-up" : showTrans==art.title && showTransIndex==j}'></text>
 								</div>
@@ -62,7 +62,7 @@
 		<div v-if='showToast' class='playmode-toast'>
 			<div class='mode-name'>{{modeName[modeIndex]}}</div>
 		</div>
-		<ThePlayController @showToastEvent='showToastEvent' @modeIndexEvent='modeIndexEvent' @sliderChange='sliderChange' @sliderChanging='sliderChanging' :data='{currentTime,show,currentTimeFormat,durationFormat,duration,modeIcon,modeIndex}'></ThePlayController>
+		<ThePlayController @showToastEvent='showToastEvent' @modeIndexEvent='modeIndexEvent' @sliderChange='sliderChange' @sliderChanging='sliderChanging' :data='{currentTime,show,currentTimeFormat,durationFormat,duration,modeIcon,modeIndex,hideTabBar}'></ThePlayController>
 	</div>
 </template>
 

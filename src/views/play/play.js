@@ -8,6 +8,7 @@ let getCurrPart = Funs.getCurrPart;
 
 export default {
 	components: { ThePlayController },
+	props: ['hideTabBar'],
 	data() {
 		return {
 			//page data
@@ -21,9 +22,7 @@ export default {
 			id: null,
 			show: false,
 			hide: false,
-			hideTabBar: false,
 			showAnchor: true,
-			showZoom: false,
 			onshow: true,
 			modeIcon: this.$store.getters.playModeLib.list,
 			modeIndex: this.$store.getters.playModeLib.index[localStorage.getItem('playMode')],
@@ -51,6 +50,15 @@ export default {
 		},
 		Audio() {
 			return this.$store.getters.Audio;
+		},
+		audioList() {
+			return this.$store.getters.audioList;
+		},
+		url() {
+			return this.$store.getters.url;
+		},
+		showZoom() {
+			return localStorage.getItem('showZoom');
 		},
 		sectionTimes() {
 			//如果是文章类型，设置章节时间列表
@@ -86,6 +94,23 @@ export default {
 		},
 		modeIndexEvent(modeIndex) {
 			this.modeIndex = modeIndex
+		},
+		showTransition(e) {
+			var dataset = e.currentTarget.dataset;
+			if (this.showTransIndex == dataset.showTransIndex) {
+				this.showTrans = this.currAudio[0].title;
+				this.showTransIndex = -1;
+			} else {
+				this.showTrans = this.currAudio[0].title;
+				this.showTransIndex = dataset.showTransIndex
+			}
+		},
+		zoom() {
+			if (this.hideTabBar) {
+				this.$emit("tabBarEvent", false);
+			} else {
+				this.$emit("tabBarEvent", true);
+			}
 		}
 	},
 	activated() {
@@ -138,118 +163,10 @@ export default {
 
 
 /*
-// pages/play/play
-const app = getApp();
-let appData = app.data;
-let Audio = appData.Audio;
 
 
 Page({
-	data: {
-		currAudio: [],//页面数据
-		type: null,//判断页面类型
-		onPlay: false,//判断播放器和musice和article的状态
-		//page data
-		sectionTimes: [],
-		currPart: '',
-		currentTime: 0,
-		currentTimeFormat: '00:00',
-		timeStamp: 0,
-		duration: Audio.duration,
-		durationFormat: '00:00',
-		windowHeight: 0,
-		id: null,
-		show: false,
-		hideTabBar: false,
-		showAnchor: true,
-		showZoom: false,
-		animation: {},
-		onshow: true,
-		modeIcon: appData.playModeLib.list,
-		modeIndex: appData.playModeLib.index[localStorage.getItem('playMode')],
-		modeName: appData.playModeLib.name,
-		showToast: false,
-		modeTimer: null,
-		rollup: false,
-		showTrans: null,
-		showTransIndex: null
-	},
-	onLoad() {
-		app.setAudioEvent(getApp(), this);
-	},
-	onReady() {
-		var that = this;
-		var data = this.data;
-		app.data.playOnload = this.onLoad;
-		app.data.onShow = this.onShow;
-		this.setData({
-			windowHeight: appData.windowHeight
-		});
-		var i = 0;
-		setInterval(() => {
-			if (!Audio.src || !appData.url) { return }
-
-			if (parseInt(data.duration) != parseInt(Audio.duration)) {
-				that.setData({
-					duration: Audio.duration,
-					durationFormat: toMinute(Audio.duration)
-				});
-			}
-			if (that.data.timeStamp) {
-				return;
-			}
-
-
-			let currentTimeFormat = toMinute(Audio.currentTime);
-
-			if (!appData.onPlay && data.onshow && i++ % 10 == 0) {
-				if (toMinute(data.currentTime) != currentTimeFormat) {
-					that.setData({
-						currentTimeFormat,
-						currentTime: Audio.currentTime
-					});
-				}
-			}
-
-
-			if (toMinute(data.currentTime) != currentTimeFormat) {
-				if (appData.onPlay && data.onshow) {
-					appData.animation.rotate(40 * appData.turns++).step();
-					that.setData({
-						animation: appData.animation.export(),
-						currentTime: Audio.currentTime,
-						currentTimeFormat
-					})
-				}
-				let currPart = getCurrPart(that.data.sectionTimes, Audio.currentTime);
-				if (currPart != that.data.currPart) {
-					that.setData({
-						currPart
-					});
-				}
-			}
-		}, 100);
-	},
-	playControl: app.Funs.playControl,
 	
-	zoom() {
-		if (this.data.hideTabBar) {
-			wx.showTabBar({
-				aniamtion: true
-			})
-			this.setData({
-				hideTabBar: false
-			});
-		} else {
-			wx.hideTabBar({
-				aniamtion: true
-			})
-			this.setData({
-				hideTabBar: true
-			});
-		}
-
-	},
 	onShow: function () {
 		if (Audio !== getApp().data.Audio) {
 			Audio = getApp().data.Audio;
@@ -318,29 +235,10 @@ Page({
 			timeStamp: 1
 		});
 	}
-	skip_previous() {
-		app.Funs.skip_previous(this, app);
-	},
-	skip_next() {
-		app.Funs.skip_next(this, app);
-	},
 	
 	
-	showTrans(e) {
-		var dataset = e.currentTarget.dataset;
-		if (this.data.showTransIndex == dataset.showTransIndex) {
-			this.setData({
-				showTrans: this.data.currAudio[0].title,
-				showTransIndex: -1
-			});
-		} else {
-			this.setData({
-				showTrans: this.data.currAudio[0].title,
-				showTransIndex: dataset.showTransIndex
-			});
-		}
-
-	}
+	
+	
 })
 
 */

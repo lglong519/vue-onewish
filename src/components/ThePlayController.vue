@@ -1,7 +1,7 @@
 <template>
 	<!--音乐控制器 -->
 	
-	<div v-if='currAudio[0].url' class='playcontroller' :class='{"hide":hide ,"show":data.show ,"bg-transparent":type !=="articleZH" && type !=="articleEN", "rollup":rollup}'>
+	<div v-if='currAudio[0].url' class='playcontroller' :class='{"hide":hide ,"show":data.show ,"bg-transparent":type !=="articleZH" && type !=="articleEN", "rollup":rollup,"hideTabBar":data.hideTabBar}'>
 		<div v-if='!rollup' class='flex-row align-center pt-2 pb-1'>
 			<div class='text-white pl-2 mr-2'>{{data.currentTimeFormat}}</div>
 			 <!-- <slider class='flex' bindchange="sliderChange" bindchanging='sliderChanging' value="{{currentTime}}" max='{{duration}}' block-size='12' activeColor='#5287E9' block-color='#FDE0E9' /> -->
@@ -13,11 +13,11 @@
 				<i class='material-icons text-24 text-grey' @click='playModeChange'>{{data.modeIcon[data.modeIndex]}}</i>
 			</div>
 			<div class='flex flex-row align-center justify-center'>
-				<i class='material-icons text-40' bindtap='skip_previous'>skip_previous</i>
+				<i class='material-icons text-40' @click='skip_previous'>skip_previous</i>
 				<i class='material-icons text-40' @click='playBackward'>fast_rewind</i>
 				<i class='material-icons text-50 mx-1' @click='playControl'>{{onPlay?"pause_circle_outline":"play_circle_outline"}}</i>
 				<i class='material-icons text-40' @click='playForward'>fast_forward</i>
-				<i class='material-icons text-40' bindtap='skip_next'>skip_next</i>
+				<i class='material-icons text-40' @click='skip_next'>skip_next</i>
 			</div>
 			<div class='aside pr-2'>
 				<i class='material-icons text-30' @click='playerRollup'>more_vert</i>
@@ -51,11 +51,20 @@ export default {
     Audio() {
       return this.$store.getters.Audio;
     },
+    index() {
+      return this.$store.getters.index;
+    },
+    audioList() {
+      return this.$store.getters.audioList;
+    },
     range() {
       return this.data.currentTime / this.data.duration * 100;
     },
     playModeLib() {
       return this.$store.getters.playModeLib;
+    },
+    url() {
+      return this.$store.getters.url;
     }
   },
   methods: {
@@ -97,11 +106,15 @@ export default {
       if (this.onPlay) {
         Funs.createRandomIndex(this.$store.getters);
       }
+    },
+    skip_previous() {
+      Funs.skip_previous(this);
+    },
+    skip_next() {
+      Funs.skip_next(this);
     }
   },
-  activated() {
-    console.log("this.data", this.data);
-  }
+  activated() {}
 };
 </script>
 
@@ -172,5 +185,13 @@ export default {
 
 .show {
   bottom: 50px;
+}
+
+.hide-to-bottom {
+  bottom: -100%;
+}
+
+.hideTabBar {
+  bottom: 0;
 }
 </style>

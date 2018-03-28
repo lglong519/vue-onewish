@@ -2,9 +2,9 @@
   <div id="onewish">
     <audio :src="url" id='audio' preload="auto"></audio>
     <keep-alive>
-      <router-view/>
+      <router-view @tabBarEvent='tabBarEvent' :hideTabBar='hideTabBar'/>
     </keep-alive>
-    <the-footer @changePath='changePath' :path='path'></the-footer>
+    <the-footer :class="{'hide-to-bottom':hideTabBar}" @changePath='changePath' :path='path'></the-footer>
   </div>
 </template>
 
@@ -12,6 +12,11 @@
 import Funs from "./utils/funs";
 export default {
   name: "App",
+  data() {
+    return {
+      hideTabBar: false
+    };
+  },
   computed: {
     path() {
       return this.$store.getters.path;
@@ -23,6 +28,9 @@ export default {
   methods: {
     changePath(path) {
       this.$store.commit("SET_PATH", path);
+    },
+    tabBarEvent(bool) {
+      this.hideTabBar = bool;
     }
   },
   beforeCreate() {

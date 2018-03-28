@@ -243,7 +243,6 @@ const setAudioEvent = that => {
                setTimeout(function () {
                   appData.Audio.play();
                }, 100);
-
             }
          } else {
             localStorage.removeItem('randomList');
@@ -276,45 +275,35 @@ const setAudioEvent = that => {
    };
 
 }
-const skip_previous = (that, app) => {
+const skip_previous = (that) => {
    var newIndex;
-   let appData = app.data;
-   if (appData.index > 0) {
-      newIndex = appData.index - 1;
+   if (that.index > 0) {
+      newIndex = that.index - 1;
    } else {
-      newIndex = appData.audioList.length - 1;
+      newIndex = that.audioList.length - 1;
    }
-   _prevOrNext(that, app, newIndex);
+   _prevOrNext(that, newIndex);
 }
 
-const skip_next = (that, app) => {
+const skip_next = (that) => {
    var newIndex;
-   let appData = app.data;
-   if (appData.index < appData.audioList.length - 1) {
-      newIndex = appData.index * 1 + 1;
+   if (that.index < that.audioList.length - 1) {
+      newIndex = that.index * 1 + 1;
    } else {
       newIndex = 0;
    }
-   _prevOrNext(that, app, newIndex);
+   _prevOrNext(that, newIndex);
 }
 
-function _prevOrNext(that, app, newIndex) {
-   resetData(app.data.type, newIndex);
-   if (app.data.url) {
-      app.data.Audio.play();
-   }
-   if (that) {
-      if (app.data.type.indexOf('article') > -1 && that.currAudio != app.data.currAudio) {
-         var sectionTimes = app.data.currAudio[0].sections.map(i => i.time);
-      }
-      that.setData({
-         currAudio: app.data.currAudio,
-         type: app.data.type,
-         onPlay: app.data.onPlay,
-         sectionTimes: sectionTimes || [],
-      });
-   } else {
-      app.data.onShow();
+function _prevOrNext(that, newIndex) {
+   that.$store.commit('RESET_DATA', {
+      type: that.type,
+      index: newIndex
+   });
+   if (that.url) {
+      setTimeout(function () {
+         that.Audio.play();
+      }, 100);
    }
 }
 
