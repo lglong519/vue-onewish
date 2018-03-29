@@ -2,6 +2,11 @@
 
 .page-articles {
    height: 100%;
+   background: linear-gradient(to bottom, #f7f3ee, #EBE1D5);
+   background-attachment: fixed;
+}
+
+body {
    background: linear-gradient(to bottom, #f8f4ee, #EBE1D5);
    background-attachment: fixed;
 }

@@ -19,8 +19,8 @@ const init = (state) => {
    localStorage.setItem('type', data.type);
    localStorage.setItem('index', data.index);
    localStorage.setItem('playMode', data.playMode);
-   localStorage.getItem('showAnchor') !== false && localStorage.setItem('showAnchor', true);
-   localStorage.getItem('showZoom') !== false && localStorage.setItem('showZoom', true);
+   localStorage.getItem('showAnchor') != 'false' && localStorage.setItem('showAnchor', true);
+   localStorage.getItem('showZoom') != 'false' && localStorage.setItem('showZoom', true);
 
    //+设置audioList
    data.audioList = getAudioList(data.type);

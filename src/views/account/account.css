@@ -13,3 +13,30 @@
    width: 35px;
    height: 35px;
 }
+
+.switch {
+   width: 32px;
+   height: 22px;
+   border-radius: 15px;
+   border: 1px solid #ddd;
+   background: #f1f4f5;
+   transition: all .1s;
+}
+
+.switch div {
+   background: white;
+   height: 18px;
+   width: 18px;
+   margin: 1px;
+   border-radius: 50%;
+   box-shadow: 1px 1px 2px grey;
+   transition: all .3s;
+}
+
+.switch-open {
+   background: #44a2d6;
+}
+
+.switch-open div {
+   margin-left: 12px;
+}

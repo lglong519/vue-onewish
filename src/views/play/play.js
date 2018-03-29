@@ -32,6 +32,7 @@ export default {
 			rollup: false,
 			showTrans: null,
 			showTransIndex: null,
+			showZoom: localStorage.getItem("showZoom") == 'true',
 
 		}
 	},
@@ -56,9 +57,6 @@ export default {
 		},
 		url() {
 			return this.$store.getters.url;
-		},
-		showZoom() {
-			return localStorage.getItem('showZoom');
 		},
 		sectionTimes() {
 			//如果是文章类型，设置章节时间列表
@@ -116,6 +114,12 @@ export default {
 	activated() {
 		console.log('play', "activated");
 		this.show = true;
+		this.modeIndex = this.$store.getters.playModeLib.index[localStorage.getItem('playMode')]
+		if (localStorage.getItem("hideTabBar") == 'true') {
+			this.$emit("tabBarEvent", true);
+		}
+		this.showZoom = localStorage.getItem("showZoom") == 'true';
+		this.showAnchor = localStorage.getItem("showAnchor") == 'true';
 	},
 	deactivated() {
 		console.log('play', "deactivated");
