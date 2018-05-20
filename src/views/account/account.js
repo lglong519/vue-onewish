@@ -1,7 +1,6 @@
 
-
 export default {
-	data() {
+	data () {
 		return {
 			userInfo: {
 				avatarUrl: '/static/images/panda-music.jpg'
@@ -10,44 +9,46 @@ export default {
 			modeName: this.$store.getters.playModeLib.name,
 			modeIndex: this.$store.getters.playModeLib.index[localStorage.getItem('playMode')],
 			mode: this.$store.getters.playModeLib.mode,
-			hideTabBar: localStorage.getItem("hideTabBar") == 'true',
-			showZoom: localStorage.getItem("showZoom") == 'true',
-			showAnchor: localStorage.getItem("showAnchor") == 'true',
-		}
+			hideTabBar: localStorage.getItem('hideTabBar') == 'true',
+			showZoom: localStorage.getItem('showZoom') == 'true',
+			showAnchor: localStorage.getItem('showAnchor') == 'true',
+		};
 	},
 	computed: {
 	},
 	methods: {
-		playModeChange() {
+		playModeChange () {
+			let index;
 			if (this.modeIndex < this.modeIcon.length - 1) {
-				var index = this.modeIndex * 1 + 1;
+				index = this.modeIndex * 1 + 1;
 			} else {
-				var index = 0;
+				index = 0;
 			}
 			this.modeIndex = index;
-			localStorage.setItem("playMode", this.mode[index]);
-			localStorage.removeItem("randomList");
+			localStorage.setItem('playMode', this.mode[index]);
+			localStorage.removeItem('randomList');
 		},
-		hideTabBarChange() {
+		hideTabBarChange () {
 			this.hideTabBar = !this.hideTabBar;
 			localStorage.setItem('hideTabBar', this.hideTabBar);
 		},
-		showZoomChange() {
+		showZoomChange () {
 			this.showZoom = !this.showZoom;
 			localStorage.setItem('showZoom', this.showZoom);
 		},
-		showAnchorChange() {
+		showAnchorChange () {
 			this.showAnchor = !this.showAnchor;
 			localStorage.setItem('showAnchor', this.showAnchor);
 		}
 	},
-	activated() {
+	activated () {
 		console.log('account actived');
-		this.hideTabBar = localStorage.getItem("hideTabBar") == 'true';
-		this.showZoom = localStorage.getItem("showZoom") == 'true';
-		this.showAnchor = localStorage.getItem("showAnchor") == 'true';
+		this.hideTabBar = localStorage.getItem('hideTabBar') == 'true';
+		this.showZoom = localStorage.getItem('showZoom') == 'true';
+		this.showAnchor = localStorage.getItem('showAnchor') == 'true';
 	}
-}
+};
+
 /*
 // pages/account/account.js
 let app = getApp();

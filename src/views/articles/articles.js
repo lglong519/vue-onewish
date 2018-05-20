@@ -2,62 +2,63 @@ import Funs from '../../utils/funs';
 const articles = {
 	articleZH: Funs.articleZH,
 	articleEN: Funs.articleEN
-}
+};
 
 export default {
-	data() {
+	data () {
 		return {
 			articles: Array,
-		}
+		};
 	},
 	computed: {
-		onPlay() {
+		onPlay () {
 			return this.$store.getters.onPlay;
 		},
-		type() {
+		type () {
 			return this.$store.getters.type;
 		},
-		index() {
+		index () {
 			return this.$store.getters.index;
 		}
 	},
 	methods: {
 		switchToPlay: Funs.switchToPlay,
-		updateArticles() {
+		updateArticles () {
 			this.articles = articles[localStorage.getItem('articleType')];
 		}
 	},
-	activated() {
-		console.log('articles', "activated");
+	activated () {
+		console.log('articles', 'activated');
 		this.updateArticles();
 	},
-	deactivated() {
-		console.log('articles', "deactivated");
+	deactivated () {
+		console.log('articles', 'deactivated');
 	},
-	beforeCreate() {
-		console.log('articles', "beforeCreates");
+	beforeCreate () {
+		console.log('articles', 'beforeCreates');
 	},
-	created() {
-		console.log('articles', "created");
+	created () {
+		console.log('articles', 'created');
 
 	},
-	beforeMount() {
-		console.log('articles', "beforeMount");
+	beforeMount () {
+		console.log('articles', 'beforeMount');
 	},
-	mounted() {
-		console.log('articles', "mounted");
+	mounted () {
+		console.log('articles', 'mounted');
 
 	},
-	beforeUpdate() {
-		console.log('articles', "beforeUpdate");
+	beforeUpdate () {
+		console.log('articles', 'beforeUpdate');
 	},
-	updated() {
-		console.log('articles', "updated");
+	updated () {
+		console.log('articles', 'updated');
 	},
-	beforeDestroy() {
-		console.log('articles', "beforeDestroy");
+	beforeDestroy () {
+		console.log('articles', 'beforeDestroy');
 	}
-}
+};
+
 /*
 const app = getApp();
 

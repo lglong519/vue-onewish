@@ -1,67 +1,68 @@
-//index.js
+// index.js
 import Funs from '../../utils/funs';
 const audioList = {
-  classical: Funs.classical,
-  music: Funs.music
-}
+	classical: Funs.classical,
+	music: Funs.music
+};
 
 export default {
-  data() {
-    return {
-      audioList: Array,
-      audioType: String
-    }
-  },
-  computed: {
-    onPlay() {
-      return this.$store.getters.onPlay;
-    },
-    type() {
-      return this.$store.getters.type;
-    },
-    index() {
-      return this.$store.getters.index;
-    }
-  },
-  methods: {
-    switchToPlay: Funs.switchToPlay,
-    playControl: Funs.playControl,
-    updateAudioList() {
-      this.audioType = localStorage.getItem('musicType');
-      this.audioList = audioList[this.audioType];
-    }
-  },
-  activated() {
-    console.log('articles', "activated");
-    this.updateAudioList();
-  },
-  deactivated() {
-    console.log('articles', "deactivated");
-  },
-  beforeCreate() {
-    console.log('articles', "beforeCreates");
-  },
-  created() {
-    console.log('articles', "created");
+	data () {
+		return {
+			audioList: Array,
+			audioType: String
+		};
+	},
+	computed: {
+		onPlay () {
+			return this.$store.getters.onPlay;
+		},
+		type () {
+			return this.$store.getters.type;
+		},
+		index () {
+			return this.$store.getters.index;
+		}
+	},
+	methods: {
+		switchToPlay: Funs.switchToPlay,
+		playControl: Funs.playControl,
+		updateAudioList () {
+			this.audioType = localStorage.getItem('musicType');
+			this.audioList = audioList[this.audioType];
+		}
+	},
+	activated () {
+		console.log('articles', 'activated');
+		this.updateAudioList();
+	},
+	deactivated () {
+		console.log('articles', 'deactivated');
+	},
+	beforeCreate () {
+		console.log('articles', 'beforeCreates');
+	},
+	created () {
+		console.log('articles', 'created');
 
-  },
-  beforeMount() {
-    console.log('articles', "beforeMount");
-  },
-  mounted() {
-    console.log('articles', "mounted");
+	},
+	beforeMount () {
+		console.log('articles', 'beforeMount');
+	},
+	mounted () {
+		console.log('articles', 'mounted');
 
-  },
-  beforeUpdate() {
-    console.log('articles', "beforeUpdate");
-  },
-  updated() {
-    console.log('articles', "updated");
-  },
-  beforeDestroy() {
-    console.log('articles', "beforeDestroy");
-  }
-}
+	},
+	beforeUpdate () {
+		console.log('articles', 'beforeUpdate');
+	},
+	updated () {
+		console.log('articles', 'updated');
+	},
+	beforeDestroy () {
+		console.log('articles', 'beforeDestroy');
+	}
+};
+
 /*
 
 Page({
@@ -70,9 +71,7 @@ Page({
   },
   switchToPlay: app.Funs.switchToPlay,
   onShow: function () {
-    
-   
-   
+
     this.setData({
       audioList: localStorage.getItem('audioType') == 'music' ? app.Funs.music : app.Funs.classical,
       type: app.data.type,

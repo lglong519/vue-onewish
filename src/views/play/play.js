@@ -1,17 +1,16 @@
 import Funs from '../../utils/funs';
-import ThePlayController from "../../components/ThePlayController";
+import ThePlayController from '../../components/ThePlayController';
 
 let toMinute = Funs.toMinute;
 let toSecond = Funs.toSecond;
 let getCurrPart = Funs.getCurrPart;
 
-
 export default {
 	components: { ThePlayController },
 	props: ['hideTabBar'],
-	data() {
+	data () {
 		return {
-			//page data
+			// page data
 			currPart: '',
 			currentTime: 0,
 			currentTimeFormat: '00:00',
@@ -32,110 +31,112 @@ export default {
 			rollup: false,
 			showTrans: null,
 			showTransIndex: null,
-			showZoom: localStorage.getItem("showZoom") == 'true',
+			showZoom: localStorage.getItem('showZoom') == 'true',
 
-		}
+		};
 	},
 	computed: {
-		onPlay() {
+		onPlay () {
 			return this.$store.getters.onPlay;
 		},
-		type() {
+		type () {
 			return this.$store.getters.type;
 		},
-		index() {
+		index () {
 			return this.$store.getters.index;
 		},
-		currAudio() {
+		currAudio () {
 			return this.$store.getters.currAudio;
 		},
-		Audio() {
+		Audio () {
 			return this.$store.getters.Audio;
 		},
-		audioList() {
+		audioList () {
 			return this.$store.getters.audioList;
 		},
-		url() {
+		url () {
 			return this.$store.getters.url;
 		},
-		sectionTimes() {
-			//如果是文章类型，设置章节时间列表
+		sectionTimes () {
+			// 如果是文章类型，设置章节时间列表
+			let sectionTimes = [];
 			if (this.type.indexOf('article') > -1) {
 				let sections = this.currAudio[0].sections;
 				if (sections) {
-					var sectionTimes = sections.map(i => i.time);
+					sectionTimes = sections.map(i => i.time);
 				}
 			}
-			return sectionTimes || [];
+			return sectionTimes;
 		}
 	},
 	methods: {
 		playControl: Funs.playControl,
-		sliderChange(val) {
+		sliderChange (val) {
 			this.Audio.currentTime = val;
 			this.timeStamp = 0;
 		},
-		sliderChanging(val) {
-			this.timeStamp = val
+		sliderChanging (val) {
+			this.timeStamp = val;
 		},
-		playSection(e) {
-			var dataset = e.currentTarget.dataset;
+		playSection (e) {
+			let dataset = e.currentTarget.dataset;
 			if (dataset.artTime) {
-				var sec = toSecond(dataset.artTime);
+				let sec = toSecond(dataset.artTime);
 				this.Audio.play();
 				this.Audio.currentTime = sec || 0;
 				this.$store.commit('SET_ONPLAY', true);
 			}
 		},
-		showToastEvent(bool) {
-			this.showToast = bool
+		showToastEvent (bool) {
+			this.showToast = bool;
 		},
-		modeIndexEvent(modeIndex) {
-			this.modeIndex = modeIndex
+		modeIndexEvent (modeIndex) {
+			this.modeIndex = modeIndex;
 		},
-		showTransition(e) {
-			var dataset = e.currentTarget.dataset;
+		showTransition (e) {
+			let dataset = e.currentTarget.dataset;
 			if (this.showTransIndex == dataset.showTransIndex) {
 				this.showTrans = this.currAudio[0].title;
 				this.showTransIndex = -1;
 			} else {
 				this.showTrans = this.currAudio[0].title;
-				this.showTransIndex = dataset.showTransIndex
+				this.showTransIndex = dataset.showTransIndex;
 			}
 		},
-		zoom() {
+		zoom () {
 			if (this.hideTabBar) {
-				this.$emit("tabBarEvent", false);
+				this.$emit('tabBarEvent', false);
 			} else {
-				this.$emit("tabBarEvent", true);
+				this.$emit('tabBarEvent', true);
 			}
 		}
 	},
-	activated() {
-		console.log('play', "activated");
+	activated () {
+		console.log('play', 'activated');
 		this.show = true;
-		this.modeIndex = this.$store.getters.playModeLib.index[localStorage.getItem('playMode')]
-		if (localStorage.getItem("hideTabBar") == 'true') {
-			this.$emit("tabBarEvent", true);
+		this.modeIndex = this.$store.getters.playModeLib.index[localStorage.getItem('playMode')];
+		if (localStorage.getItem('hideTabBar') == 'true') {
+			this.$emit('tabBarEvent', true);
 		}
-		this.showZoom = localStorage.getItem("showZoom") == 'true';
-		this.showAnchor = localStorage.getItem("showAnchor") == 'true';
+		this.showZoom = localStorage.getItem('showZoom') == 'true';
+		this.showAnchor = localStorage.getItem('showAnchor') == 'true';
 	},
-	deactivated() {
-		console.log('play', "deactivated");
+	deactivated () {
+		console.log('play', 'deactivated');
 		this.show = false;
 	},
-	mounted() {
-		console.log('play', "mounted");
-		var i = 0;
-		var that = this;
+	mounted () {
+		console.log('play', 'mounted');
+		let i = 0;
 		let Audio = this.Audio;
 		setInterval(() => {
-			if (!Audio.src || !this.$store.getters.url || !this.show) { return }
+			if (!Audio.src || !this.$store.getters.url || !this.show) {
+				return;
+			}
 
 			if (parseInt(this.duration) != parseInt(Audio.duration)) {
 				this.duration = Audio.duration,
-					this.durationFormat = toMinute(Audio.duration)
+				this.durationFormat = toMinute(Audio.duration);
 			}
 			if (this.timeStamp) {
 				return;
@@ -163,14 +164,12 @@ export default {
 		}, 100);
 	},
 
-}
-
+};
 
 /*
 
-
 Page({
-	
+
 	onShow: function () {
 		if (Audio !== getApp().data.Audio) {
 			Audio = getApp().data.Audio;
@@ -196,7 +195,7 @@ Page({
 			borderStyle: appData.url ? 'white' : ''
 		});
 		console.log('play onshow');
-		
+
 		this.setData({
 			currAudio: appData.currAudio,
 			type: appData.type,
@@ -239,10 +238,7 @@ Page({
 			timeStamp: 1
 		});
 	}
-	
-	
-	
-	
+
 })
 
 */

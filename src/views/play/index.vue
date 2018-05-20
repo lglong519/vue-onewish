@@ -9,7 +9,7 @@
 			<a href="#currentPart" class="text-grey">
 				<i v-if='currAudio[0].url && showAnchor' class='material-icons anchor text-30' bindtap='toSection'>play_for_work</i>
 			</a>
-			<div class="page__bd">
+			<div class="page__bd reset-bg">
 				<div v-for='art in currAudio' :key='art.title' class="weui-article">
 					<div class="weui-article__section">
 						<!--标题  -->

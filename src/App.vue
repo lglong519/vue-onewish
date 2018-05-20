@@ -1,11 +1,11 @@
 <template>
-  <div id="onewish">
-    <audio :src="url" id='audio' preload="auto"></audio>
-    <keep-alive>
-      <router-view @tabBarEvent='tabBarEvent' :hideTabBar='hideTabBar'/>
-    </keep-alive>
-    <the-footer :class="{'hide-to-bottom':hideTabBar}" @changePath='changePath' :path='path'></the-footer>
-  </div>
+	<div id="onewish">
+		<audio :src="url" id='audio' preload="auto"></audio>
+		<keep-alive>
+			<router-view @tabBarEvent='tabBarEvent' :hideTabBar='hideTabBar' />
+		</keep-alive>
+		<the-footer :class="{'hide-to-bottom':hideTabBar}" @changePath='changePath' :path='path'></the-footer>
+	</div>
 </template>
 
 <script>
@@ -27,6 +27,8 @@ export default {
   },
   methods: {
     changePath(path) {
+      console.log("changePath");
+
       this.$store.commit("SET_PATH", path);
     },
     tabBarEvent(bool) {
@@ -67,7 +69,7 @@ body,
   height: 100%;
 }
 #onewish {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: "microsoft yahei", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
