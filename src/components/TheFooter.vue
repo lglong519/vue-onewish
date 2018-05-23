@@ -15,7 +15,10 @@
 		</div>
 		<div class="play" :class="{active:path=='play'}" @click="switchTo($event)">
 			<i class='material-icons'>equalizer</i>
-			<span>播放</span>
+			<span>
+				播放
+				<i :class="onPlay && 'reddot'"></i>
+			</span>
 		</div>
 		<div class="account" :class="{active:path=='account'}" @click="switchTo($event)">
 			<i class='material-icons'>perm_identity</i>
@@ -26,7 +29,7 @@
 
 <script>
 export default {
-  props: ["path"],
+  props: ["path",'onPlay'],
   methods: {
     switchTo(e) {
       let className = e.currentTarget.className.trim();
@@ -102,6 +105,9 @@ $color-sky: #3d83f8;
     }
   }
   .play {
+	  >span{
+		position: relative;
+	  }
     &.active {
       color: $color-green;
     }
@@ -120,6 +126,16 @@ $color-sky: #3d83f8;
       border-top-color: lighten($color-sky, 30%);
       background-color: lighten($color-sky, 30%);
     }
+  }
+  .reddot{
+	  position: absolute;
+	  top: -20px;
+	  right: 0;
+	  height: 6px;
+	  width: 6px;
+	  border-radius:50%;
+	  background-color: red; 
+	  box-shadow:0px 0px 5px red;
   }
 }
 </style>

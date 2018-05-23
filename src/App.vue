@@ -4,7 +4,7 @@
 		<keep-alive>
 			<router-view @tabBarEvent='tabBarEvent' :hideTabBar='hideTabBar' />
 		</keep-alive>
-		<the-footer :class="{'hide-to-bottom':hideTabBar}" @changePath='changePath' :path='path'></the-footer>
+		<the-footer :class="{'hide-to-bottom':hideTabBar}" @changePath='changePath' :path='path' :onPlay='onPlay'></the-footer>
 	</div>
 </template>
 
@@ -23,7 +23,10 @@ export default {
     },
     url() {
       return this.$store.getters.url;
-    }
+	},
+	onPlay() {
+      return this.$store.getters.onPlay;
+    },
   },
   methods: {
     changePath(path) {
