@@ -28,93 +28,92 @@
 
 
 <script>
-import Funs from "../utils/funs";
+import Funs from '../utils/funs';
 export default {
-  props: ["data"],
-  data() {
-    return {
-      hide: false,
-      rollup: false,
-      modeTimer: null
-    };
-  },
-  computed: {
-    currAudio() {
-      return this.$store.getters.currAudio;
-    },
-    onPlay() {
-      return this.$store.getters.onPlay;
-    },
-    type() {
-      return this.$store.getters.type;
-    },
-    Audio() {
-      return this.$store.getters.Audio;
-    },
-    index() {
-      return this.$store.getters.index;
-    },
-    audioList() {
-      return this.$store.getters.audioList;
-    },
-    range() {
-      return this.data.currentTime / this.data.duration * 100;
-    },
-    playModeLib() {
-      return this.$store.getters.playModeLib;
-    },
-    url() {
-      return this.$store.getters.url;
-    }
-  },
-  methods: {
-    playControl: Funs.playControl,
-    playerRollup() {
-      this.rollup = !this.rollup;
-    },
-    //后退5s
-    playBackward() {
-      this.Audio.currentTime = this.data.currentTime - 5;
-    },
-    playForward() {
-      this.Audio.currentTime = this.data.currentTime + 5;
-    },
-    sliderChanging() {
-      console.log("Changing");
-      this.$emit("sliderChanging", 1);
-    },
-    sliderChange() {
-      console.log("changed");
-      this.$emit("sliderChange", this.data.currentTime);
-    },
-    playModeChange() {
-      this.modeTimer && clearTimeout(this.modeTimer);
-      if (this.data.modeIndex < this.playModeLib.list.length - 1) {
-        var index = this.data.modeIndex * 1 + 1;
-      } else {
-        var index = 0;
-      }
+	props: ['data'],
+	data () {
+		return {
+			hide: false,
+			rollup: false,
+			modeTimer: null,
+			lyrics: null,
+		};
+	},
+	computed: {
+		currAudio () {
+			return this.$store.getters.currAudio;
+		},
+		onPlay () {
+			return this.$store.getters.onPlay;
+		},
+		type () {
+			return this.$store.getters.type;
+		},
+		Audio () {
+			return this.$store.getters.Audio;
+		},
+		index () {
+			return this.$store.getters.index;
+		},
+		audioList () {
+			return this.$store.getters.audioList;
+		},
+		range () {
+			return this.data.currentTime / this.data.duration * 100;
+		},
+		playModeLib () {
+			return this.$store.getters.playModeLib;
+		},
+		url () {
+			return this.$store.getters.url;
+		}
+	},
+	methods: {
+		playControl: Funs.playControl,
+		playerRollup () {
+			this.rollup = !this.rollup;
+		},
+		// 后退5s
+		playBackward () {
+			this.Audio.currentTime = this.data.currentTime - 5;
+		},
+		playForward () {
+			this.Audio.currentTime = this.data.currentTime + 5;
+		},
+		sliderChanging () {
+			this.$emit('sliderChanging', 1);
+		},
+		sliderChange () {
+			this.$emit('sliderChange', this.data.currentTime);
+		},
+		playModeChange () {
+			this.modeTimer && clearTimeout(this.modeTimer);
+			let index = 0;
+			if (this.data.modeIndex < this.playModeLib.list.length - 1) {
+				index = this.data.modeIndex * 1 + 1;
+			}
 
-      this.$emit("modeIndexEvent", index);
-      this.$emit("showToastEvent", true);
+			this.$emit('modeIndexEvent', index);
+			this.$emit('showToastEvent', true);
 
-      this.modeTimer = setTimeout(() => {
-        this.$emit("showToastEvent", false);
-      }, 2000);
-      localStorage.setItem("playMode", this.playModeLib.mode[index]);
-      localStorage.removeItem("randomList");
-      if (this.onPlay) {
-        Funs.createRandomIndex(this.$store.getters);
-      }
-    },
-    skip_previous() {
-      Funs.skip_previous(this);
-    },
-    skip_next() {
-      Funs.skip_next(this);
-    }
-  },
-  activated() {}
+			this.modeTimer = setTimeout(() => {
+				this.$emit('showToastEvent', false);
+			}, 2000);
+			localStorage.setItem('playMode', this.playModeLib.mode[index]);
+			localStorage.removeItem('randomList');
+			if (this.onPlay) {
+				Funs.createRandomIndex(this.$store.getters);
+			}
+		},
+		skip_previous () {
+			Funs.skip_previous(this);
+		},
+		skip_next () {
+			Funs.skip_next(this);
+		}
+	},
+	activated () {
+	}
 };
 </script>
 

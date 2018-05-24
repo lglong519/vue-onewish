@@ -74,7 +74,7 @@
 .disc-wrapper {
    width: 240px;
    height: 240px;
-   margin-top: 60px;
+   margin-top: 40px;
    border-radius: 50%;
 }
 
@@ -147,4 +147,23 @@
 
 .reset-bg {
    background-color: #f7f7f7;
+}
+
+.lrc-container {
+   width: 100%;
+   height: 110px;
+   overflow: hidden;
+}
+
+.lrc-box {
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+   transition: top .2s;
+}
+
+.lrc-box>span {
+   height: 22px;
+   line-height: 22px;
 }

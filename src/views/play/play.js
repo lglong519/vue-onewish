@@ -1,9 +1,7 @@
 import Funs from '../../utils/funs';
 import ThePlayController from '../../components/ThePlayController';
 
-let toMinute = Funs.toMinute;
-let toSecond = Funs.toSecond;
-let getCurrPart = Funs.getCurrPart;
+const { toMinute, toSecond, getCurrPart, lyricFormat, lyric } = Funs;
 
 export default {
 	components: { ThePlayController },
@@ -32,7 +30,10 @@ export default {
 			showTrans: null,
 			showTransIndex: null,
 			showZoom: localStorage.getItem('showZoom') == 'true',
-
+			currLyric: 0,
+			lyricIndex: 'lyric0',
+			eqIndex: null,
+			lyrics: null
 		};
 	},
 	computed: {
@@ -109,21 +110,26 @@ export default {
 			} else {
 				this.$emit('tabBarEvent', true);
 			}
-		}
+		},
+		updateLyrics (lyrics) {
+			this.lyrics = lyrics;
+		},
 	},
 	activated () {
-		console.log('play', 'activated');
 		this.show = true;
+		this.onshow = true;
 		this.modeIndex = this.$store.getters.playModeLib.index[localStorage.getItem('playMode')];
 		if (localStorage.getItem('hideTabBar') == 'true') {
 			this.$emit('tabBarEvent', true);
 		}
 		this.showZoom = localStorage.getItem('showZoom') == 'true';
 		this.showAnchor = localStorage.getItem('showAnchor') == 'true';
+		this.lyrics = lyricFormat(lyric[this.currAudio[0].id]);
 	},
 	deactivated () {
 		console.log('play', 'deactivated');
 		this.show = false;
+		this.onshow = false;
 	},
 	mounted () {
 		console.log('play', 'mounted');
@@ -143,7 +149,7 @@ export default {
 			}
 			let currentTimeFormat = toMinute(Audio.currentTime);
 
-			if (!this.onPlay && this.onshow && i++ % 10 == 0) {
+			if (!this.onPlay && this.onshow && i++ % 2 == 0) {
 				if (toMinute(this.currentTime) != currentTimeFormat) {
 					this.currentTimeFormat = currentTimeFormat;
 					this.currentTime = Audio.currentTime;
@@ -155,13 +161,38 @@ export default {
 					this.currentTime = Audio.currentTime;
 					this.currentTimeFormat = currentTimeFormat;
 				}
-				let currPart = getCurrPart(this.sectionTimes, Audio.currentTime);
+
+				let [currPart, eqIndex] = getCurrPart(this.sectionTimes, Audio.currentTime);
+				let [currLyric] = getCurrPart(this.lyrics.lyricTimeTable, Audio.currentTime);
+				currLyric == '00:00' && (currLyric = 0);
+				if (currPart != this.currPart && currLyric != this.currLyric) {
+					let index = this.lyrics.lyricTimeTable.indexOf(currLyric);
+					let lyricIndex = 'lyric' + (index > 1 ? index - 2 : 0);
+					this.eqIndex = eqIndex;
+					this.currPart = currPart;
+					this.currLyric = currLyric;
+					this.lyricIndex = lyricIndex;
+					return;
+				}
+
 				if (currPart != this.currPart) {
 					this.currPart = currPart;
 				}
+
+				if (currLyric != this.currLyric) {
+					let index = this.lyrics.lyricTimeTable.indexOf(currLyric);
+					if (index > 1) {
+						index -= 2;
+					} else {
+						index = 0;
+					}
+					let lyricIndex = 'top:-' + index * 22 + 'px';
+					this.currLyric = currLyric;
+					this.lyricIndex = lyricIndex;
+				}
 			}
 
-		}, 100);
+		}, 10);
 	},
 
 };

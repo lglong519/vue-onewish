@@ -1,7 +1,6 @@
 <template>
 	<div class="play">
-		<i v-if='showZoom' class='material-icons text-30 text-grey zoom' :class='{"text-white":type !=="articleZH" && type !=="articleEN"}'
-		 @click='zoom'>{{hideTabBar?"select_all":"zoom_out_map"}}</i>
+		<i v-if='showZoom' class='material-icons text-30 text-grey zoom' :class='{"text-white":type !=="articleZH" && type !=="articleEN"}' @click='zoom'>{{hideTabBar?"select_all":"zoom_out_map"}}</i>
 
 		<!--文章  -->
 		<div class="page" v-if='type=="articleZH" || type=="articleEN"'>
@@ -25,8 +24,7 @@
 							<!--时间  -->
 							<div v-if='item.time' :id='currPart==item.time? "currentPart":""' class='weui-article__h3' :class='currPart==item.time && onPlay?"text-blue-2":"text-grey-6"'>
 								{{item.time}}
-								<i class='material-icons' :class='currPart==item.time && onPlay?"text-green-0":"text-grey-1"' @click='playSection' :data-art-id='art.id'
-								 :data-art-url='art.url' :data-art-time='item.time'>{{currPart==item.time && onPlay && currentTimeFormat[4]%2==0 ?"volume_mute":"volume_down"}}</i>
+								<i class='material-icons' :class='currPart==item.time && onPlay?"text-green-0":"text-grey-1"' @click='playSection' :data-art-id='art.id' :data-art-url='art.url' :data-art-time='item.time'>{{currPart==item.time && onPlay && currentTimeFormat[4]%2==0 ?"volume_mute":"volume_down"}}</i>
 							</div>
 							<!--文本  -->
 							<div class="weui-article__p text-justify" :class="item.time && currPart==item.time && 'bg-cyan-0'">
@@ -56,18 +54,27 @@
 				<img :src='currAudio[0].image || "/static/images/2018fly.jpg"' class='disc-image' />
 			</div>
 			<div class='z-index mt-4 text-white'>{{currAudio[0].title}}</div>
-			<div class='z-index mt-4 text-white'>{{currAudio[0].author}}</div>
+			<div class='z-index mt-2 text-white'>{{currAudio[0].author}}</div>
 			<img :src='currAudio[0].image || "/static/images/stars-128.jpg"' class='bg-music blur' />
+			<div class='z-index mt-3 text-white text-center lrc-container'>
+				<div v-if="lyrics" class="lrc-box" :style="lyricIndex">
+					<span v-for="(lrc,i) in lyrics.lyricList" :key='lrc.time' :class="{'text-green-0':lrc.time==currLyric}" :id="'lyric'+i">{{lrc.text}}</span>
+				</div>
+				<!-- 
+				<div scroll-y="true" scroll-into-view="{{lyricIndex}}" scroll-with-animation="true" enable-back-to-top="true">
+					<span v-for="(item,i) in lyrics.lyricList" :key='item.time' class='text-center' :class="{'text-green-0':item.time==currLyric}" :id="'lyric'+i">{{item.text}}</span>
+				</div>
+				 -->
+			</div>
 		</div>
 		<div v-if='showToast' class='playmode-toast'>
 			<div class='mode-name'>{{modeName[modeIndex]}}</div>
 		</div>
-		<ThePlayController @showToastEvent='showToastEvent' @modeIndexEvent='modeIndexEvent' @sliderChange='sliderChange' @sliderChanging='sliderChanging' :data='{currentTime,show,currentTimeFormat,durationFormat,duration,modeIcon,modeIndex,hideTabBar}'></ThePlayController>
+		<ThePlayController @showToastEvent='showToastEvent' @modeIndexEvent='modeIndexEvent' @sliderChange='sliderChange' @sliderChanging='sliderChanging' @updateLyrics='updateLyrics' :data='{currentTime,show,currentTimeFormat,durationFormat,duration,modeIcon,modeIndex,hideTabBar}'></ThePlayController>
 	</div>
 </template>
 
 <style src='./play.css'>
-
 </style>
 
 <script src='./play.js'>

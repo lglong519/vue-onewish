@@ -2,6 +2,8 @@ import articleZH from '../../static/libs/articleZH';
 import articleEN from '../../static/libs/articleEN';
 import classical from '../../static/libs/classical';
 import music from '../../static/libs/music';
+import lyric from '../../static/libs/lyric';
+
 import { setTimeout } from 'timers';
 
 const init = state => {
@@ -65,15 +67,17 @@ const resetData = (state, params) => {
 	}
 };
 const switchToPlay = function (e) {
-	let dataset = e.currentTarget.dataset;
+	let { audioType: type, audioIndex: index } = e.currentTarget.dataset;
 	this.$store.commit('RESET_DATA', {
-		type: dataset.audioType,
-		index: dataset.audioIndex
+		type,
+		index
 	});
 	setTimeout(() => {
 		this.$store.getters.Audio.play();
 	}, 100);
-	this.$router.push({ path: '/play' });
+	this.$router.push({
+		path: '/play'
+	});
 };
 const playControl = function (e) {
 	let dataset = e.currentTarget.dataset;
@@ -162,7 +166,7 @@ const showRedDot = app => {
 const setAudioEvent = that => {
 
 	let appData = that.$store.getters;
-	let Audio = appData.Audio;
+	let { Audio } = appData;
 	Audio.onplay = () => {
 		console.log('onPlay');
 		if (!appData.url) {
@@ -211,6 +215,10 @@ const setAudioEvent = that => {
 						appData.Audio.play();
 					}, 100);
 				}
+				let lyrics = lyricFormat(lyric[that.$store.getters.currAudio[0].id]);
+				// 通过 ref 来调用子组件的方法
+				that.$refs.lyrics && that.$refs.lyrics.updateLyrics && that.$refs.lyrics.updateLyrics(lyrics);
+
 			}
 		}
 
@@ -230,10 +238,15 @@ const setAudioEvent = that => {
 					appData.Audio.play();
 				}, 100);
 			}
+			let lyrics = lyricFormat(lyric[that.$store.getters.currAudio[0].id]);
+			that.$refs.lyrics && that.$refs.lyrics.updateLyrics && that.$refs.lyrics.updateLyrics(lyrics);
+
 		}
 
 		if (playMode === 'randomList') {
-			let list = JSON.parse(localStorage.getItem('randomList')) || [];
+			let list = JSON.parse(localStorage.getItem('randomList')) || [
+
+			];
 			list && list.shift();
 			if (list.length) {
 				localStorage.setItem('randomList', JSON.stringify(list));
@@ -246,6 +259,8 @@ const setAudioEvent = that => {
 						appData.Audio.play();
 					}, 100);
 				}
+				let lyrics = lyricFormat(lyric[that.$store.getters.currAudio[0].id]);
+				that.$refs.lyrics && that.$refs.lyrics.updateLyrics && that.$refs.lyrics.updateLyrics(lyrics);
 			} else {
 				localStorage.removeItem('randomList');
 			}
@@ -260,9 +275,16 @@ const setAudioEvent = that => {
 			if (appData.url) {
 				appData.Audio.play();
 			}
+			let lyrics = lyricFormat(lyric[that.$store.getters.currAudio[0].id]);
+			that.$refs.lyrics && that.$refs.lyrics.updateLyrics && that.$refs.lyrics.updateLyrics(lyrics);
 		}
 		if (playMode === 'randomAll') {
-			let types = ['articleZH', 'articleEN', 'classical', 'music'];
+			let types = [
+				'articleZH',
+				'articleEN',
+				'classical',
+				'music'
+			];
 			let typeIndex = parseInt(Math.random() * types.length);
 			appData.audioList = _getAudioList(types[typeIndex]);
 			let newIndex = parseInt(Math.random() * appData.audioList.length);
@@ -273,6 +295,8 @@ const setAudioEvent = that => {
 			if (appData.url) {
 				appData.Audio.play();
 			}
+			let lyrics = lyricFormat(lyric[that.$store.getters.currAudio[0].id]);
+			that.$refs.lyrics && that.$refs.lyrics.updateLyrics && that.$refs.lyrics.updateLyrics(lyrics);
 		}
 	};
 
@@ -302,6 +326,8 @@ function _prevOrNext (that, newIndex) {
 		type: that.type,
 		index: newIndex
 	});
+	let lyrics = lyricFormat(lyric[that.currAudio[0].id]);
+	that.$emit('updateLyrics', lyrics);
 	if (that.url) {
 		setTimeout(() => {
 			that.Audio.play();
@@ -312,42 +338,59 @@ function _prevOrNext (that, newIndex) {
 const toMinute = myTime => {
 	let minutes = parseInt(myTime / 60);
 	let seconds = parseInt(myTime - 60 * minutes);
-	minutes = minutes < 10 ? '0' + minutes : minutes;
-	seconds = seconds < 10 ? '0' + seconds : seconds;
-	return minutes + ':' + seconds;
+	minutes = minutes < 10 ? `0${minutes}` : minutes;
+	seconds = seconds < 10 ? `0${seconds}` : seconds;
+	return `${minutes}:${seconds}`;
 };
 const toSecond = myTime => {
+	if (typeof myTime === 'number') {
+		return myTime;
+	}
 	let reg = /[:：]/;
+	myTime = myTime.replace(/[[\]\s]/g, '');
 	if (!reg.test(myTime)) {
 		return myTime;
 	}
 	let arr = myTime.split(reg);
 	return arr[0] * 60 + arr[1] * 1;
 };
-const getCurrPart = (sectionTime, currentTime) => {
-	for (let j = 0; j < sectionTime.length; j++) {
-		if (j === sectionTime.length - 1) {
-			if (toSecond(currentTime) >= toSecond(sectionTime[j])) {
-				return sectionTime[j];
-			}
+
+const getCurrPart = (sectionTimes, currentTime) => {
+	let i = sectionTimes.length - 1;
+	if (typeof i !== 'number' || isNaN(i)) {
+		throw new TypeError('i is not a Number');
+	}
+	let eqIndex = true;
+	while (i >= 0) {
+		if (!sectionTimes[i]) {
+			eqIndex = false;
 		}
-		if (toSecond(currentTime) >= toSecond(sectionTime[j]) && toSecond(currentTime) < toSecond(sectionTime[j + 1])) {
-			return sectionTime[j];
+		let eqCurrentTime = toSecond(currentTime) >= toSecond(sectionTimes[i]);
+		if (!eqCurrentTime) {
+			eqIndex = true;
+		} else if (sectionTimes[i]) {
+			return [sectionTimes[i], eqIndex];
 		}
+		i--;
 	}
 	return '00:00';
 };
+
 const createRandomIndex = getters => {
 	let appData = getters;
 	if (localStorage.getItem('playMode') == 'randomList') {
 		if (!localStorage.getItem('randomList')) {
 			let count = appData.audioList.length - 1;
-			let initNo = [];
+			let initNo = [
+
+			];
 			while (count >= 0) {
 				initNo.unshift(count--);
 			}
 			initNo.splice(appData.index, 1);
-			let randomList = [];
+			let randomList = [
+
+			];
 			(function getRandomNo () {
 				if (initNo.length > 0) {
 					randomList = randomList.concat(initNo.splice(parseInt(Math.random() * initNo.length), 1));
@@ -359,11 +402,56 @@ const createRandomIndex = getters => {
 		}
 	}
 };
+
+const lyricFormat = lyric => {
+	if (!lyric) {
+		return {
+			lyricTimeTable: [],
+			lyricJson: {},
+			lyricList: []
+		};
+	}
+	let arr = lyric.split('\n');
+	let lyricJson = {};
+	let lyricTimeTable = [];
+	arr.forEach(item => {
+		let text = item.replace(/\[\d+([^\]]*)?\d+\]/g, '');
+		if (!text) {
+			return;
+		}
+		let time = item.replace(text, '').replace(/\s/g, '');
+		let timeTable = time.match(/\[([^\]]*)?\]/g);
+		if (timeTable) {
+			timeTable.forEach(val => {
+				let seconds = toSecond(val);
+				lyricJson[seconds] = {};
+				lyricJson[seconds].text = text;
+				lyricJson[seconds].time = seconds;
+				lyricTimeTable.push(seconds);
+			});
+		} else if (lyricJson[0]) {
+			lyricJson[0].text = `${lyricJson[0].text}\n${text}`;
+		} else {
+			lyricTimeTable.push(0);
+			lyricJson[0] = {};
+			lyricJson[0].text = text;
+			lyricJson[0].time = 0;
+		}
+	});
+	lyricTimeTable.sort((a, b) => a - b);
+	return {
+		lyricTimeTable,
+		lyricJson,
+		lyricList: Object.values(lyricJson).sort((a, b) => a.time - b.time)
+	};
+};
+
 export default {
 	articleZH,
 	articleEN,
 	classical,
 	music,
+	lyric,
 	init,
 	keepPlay,
 	switchToPlay,
@@ -375,5 +463,6 @@ export default {
 	getCurrPart,
 	skip_previous,
 	skip_next,
-	createRandomIndex
+	createRandomIndex,
+	lyricFormat,
 };
