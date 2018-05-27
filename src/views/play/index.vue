@@ -60,11 +60,6 @@
 				<div v-if="lyrics" class="lrc-box" :style="lyricIndex">
 					<span v-for="(lrc,i) in lyrics.lyricList" :key='lrc.time' :class="{'text-green-0':lrc.time==currLyric}" :id="'lyric'+i">{{lrc.text}}</span>
 				</div>
-				<!-- 
-				<div scroll-y="true" scroll-into-view="{{lyricIndex}}" scroll-with-animation="true" enable-back-to-top="true">
-					<span v-for="(item,i) in lyrics.lyricList" :key='item.time' class='text-center' :class="{'text-green-0':item.time==currLyric}" :id="'lyric'+i">{{item.text}}</span>
-				</div>
-				 -->
 			</div>
 		</div>
 		<div v-if='showToast' class='playmode-toast'>
@@ -74,7 +69,7 @@
 	</div>
 </template>
 
-<style src='./play.css'>
+<style src='./play.scss' lang="scss">
 </style>
 
 <script src='./play.js'>

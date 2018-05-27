@@ -1,6 +1,6 @@
 <template>
 	<div class="flex-row align-center justify-between the-footer text-grey bg-white" 
-  :class="{'bg-articles':path=='articles'}">
+  :class="{'bg-articles':path=='articles','hide-to-bottom':hideTabBar}">
 		<div class="index" :class="{active:path=='index'}" @click="switchTo($event)">
 			<i class='material-icons'>home</i>
 			<span>主页</span>
@@ -29,18 +29,18 @@
 
 <script>
 export default {
-  props: ["path",'onPlay'],
-  methods: {
-    switchTo(e) {
-      let className = e.currentTarget.className.trim();
-      if (className.indexOf("active") === -1) {
-        this.$router.push({
-          path: `/${className}`
-        });
-        this.$emit("changePath", className);
-      }
-    }
-  }
+	props: ['path', 'onPlay', 'hideTabBar'],
+	methods: {
+		switchTo (e) {
+			let className = e.currentTarget.className.trim();
+			if (className.indexOf('active') === -1) {
+				this.$router.push({
+					path: `/${className}`
+				});
+				this.$emit('changePath', className);
+			}
+		}
+	}
 };
 </script>
 
@@ -137,5 +137,8 @@ $color-sky: #3d83f8;
 	  background-color: red; 
 	  box-shadow:0px 0px 5px red;
   }
+  &.hide-to-bottom{
+	bottom: -51px;
+}
 }
 </style>

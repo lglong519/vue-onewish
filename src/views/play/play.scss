@@ -161,9 +161,8 @@
    flex-direction: column;
    width: 100%;
    transition: top .2s;
-}
-
-.lrc-box>span {
-   height: 22px;
-   line-height: 22px;
+   &>span {
+      height: 22px;
+      line-height: 22px;
+   }
 }

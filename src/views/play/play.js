@@ -17,8 +17,7 @@ export default {
 			durationFormat: '00:00',
 			windowHeight: 0,
 			id: null,
-			show: false,
-			hide: false,
+			show: true,
 			showAnchor: true,
 			onshow: true,
 			modeIcon: this.$store.getters.playModeLib.list,
@@ -26,7 +25,6 @@ export default {
 			modeName: this.$store.getters.playModeLib.name,
 			showToast: false,
 			modeTimer: null,
-			rollup: false,
 			showTrans: null,
 			showTransIndex: null,
 			showZoom: localStorage.getItem('showZoom') == 'true',
@@ -62,7 +60,7 @@ export default {
 			// 如果是文章类型，设置章节时间列表
 			let sectionTimes = [];
 			if (this.type.indexOf('article') > -1) {
-				let sections = this.currAudio[0].sections;
+				let { sections } = this.currAudio[0];
 				if (sections) {
 					sectionTimes = sections.map(i => i.time);
 				}
@@ -80,7 +78,7 @@ export default {
 			this.timeStamp = val;
 		},
 		playSection (e) {
-			let dataset = e.currentTarget.dataset;
+			let { dataset } = e.currentTarget;
 			if (dataset.artTime) {
 				let sec = toSecond(dataset.artTime);
 				this.Audio.play();
@@ -116,7 +114,8 @@ export default {
 		},
 	},
 	activated () {
-		this.show = true;
+		// 控制 进度条 显示/隐藏
+		// this.show = true;
 		this.onshow = true;
 		this.modeIndex = this.$store.getters.playModeLib.index[localStorage.getItem('playMode')];
 		if (localStorage.getItem('hideTabBar') == 'true') {
@@ -128,13 +127,13 @@ export default {
 	},
 	deactivated () {
 		console.log('play', 'deactivated');
-		this.show = false;
+		// this.show = false;
 		this.onshow = false;
 	},
 	mounted () {
 		console.log('play', 'mounted');
 		let i = 0;
-		let Audio = this.Audio;
+		let { Audio } = this;
 		setInterval(() => {
 			if (!Audio.src || !this.$store.getters.url || !this.show) {
 				return;
@@ -167,7 +166,7 @@ export default {
 				currLyric == '00:00' && (currLyric = 0);
 				if (currPart != this.currPart && currLyric != this.currLyric) {
 					let index = this.lyrics.lyricTimeTable.indexOf(currLyric);
-					let lyricIndex = 'lyric' + (index > 1 ? index - 2 : 0);
+					let lyricIndex = `lyric${index > 1 ? index - 2 : 0}`;
 					this.eqIndex = eqIndex;
 					this.currPart = currPart;
 					this.currLyric = currLyric;
@@ -186,7 +185,7 @@ export default {
 					} else {
 						index = 0;
 					}
-					let lyricIndex = 'top:-' + index * 22 + 'px';
+					let lyricIndex = `top:-${index * 22}px`;
 					this.currLyric = currLyric;
 					this.lyricIndex = lyricIndex;
 				}

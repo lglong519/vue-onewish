@@ -8,7 +8,7 @@ let views = {
 let routes = Object.keys(views).map(item => ({
 	path: `/${item}`,
 	name: `${views[item]}`,
-	component: () => import('../views/' + item + '/index.vue')
+	component: () => import(`../views/${item}/index.vue`)
 }));
 routes.unshift({
 	path: '',

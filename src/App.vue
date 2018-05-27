@@ -4,7 +4,7 @@
 		<keep-alive>
 			<router-view @tabBarEvent='tabBarEvent' :hideTabBar='hideTabBar' ref='lyrics' />
 		</keep-alive>
-		<the-footer :class="{'hide-to-bottom':hideTabBar}" @changePath='changePath' :path='path' :onPlay='onPlay'></the-footer>
+		<the-footer :hideTabBar='hideTabBar' @changePath='changePath' :path='path' :onPlay='onPlay'></the-footer>
 	</div>
 </template>
 

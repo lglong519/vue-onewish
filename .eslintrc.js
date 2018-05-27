@@ -13,7 +13,8 @@ module.exports = {
 		// consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
 		'plugin:vue/essential',
 		// https://github.com/lglong519/eslint-config.git
-		'lglong519'
+		'lglong519/standard',
+		// 'lglong519/beautify'
 	],
 	// required to lint *.vue files
 	plugins: [
