@@ -1,5 +1,6 @@
 import Funs from '../../utils/funs';
 import ThePlayController from '../../components/ThePlayController';
+import { LAG_TIME } from '../../config';
 
 const { toMinute, toSecond, getCurrPart, lyricFormat, lyric } = Funs;
 
@@ -31,7 +32,8 @@ export default {
 			currLyric: 0,
 			lyricIndex: 'lyric0',
 			eqIndex: null,
-			lyrics: null
+			lyrics: null,
+			waitTime: LAG_TIME,
 		};
 	},
 	computed: {
@@ -71,8 +73,10 @@ export default {
 	methods: {
 		playControl: Funs.playControl,
 		sliderChange (val) {
+			this.Audio.play();
 			this.Audio.currentTime = val;
 			this.timeStamp = 0;
+			this.$store.commit('SET_ONPLAY', true);
 		},
 		sliderChanging (val) {
 			this.timeStamp = val;
@@ -112,6 +116,9 @@ export default {
 		updateLyrics (lyrics) {
 			this.lyrics = lyrics;
 		},
+		touchScreen () {
+			this.waitTime = LAG_TIME;
+		}
 	},
 	activated () {
 		// 控制 进度条 显示/隐藏
@@ -132,9 +139,13 @@ export default {
 	},
 	mounted () {
 		console.log('play', 'mounted');
-		let i = 0;
+		let i = 1, n = 1;
 		let { Audio } = this;
 		setInterval(() => {
+			if (n++ % 100 == 0) {
+				this.waitTime -= 1000;
+				this.waitTime < 0 && (this.waitTime = -1);
+			}
 			if (!Audio.src || !this.$store.getters.url || !this.show) {
 				return;
 			}

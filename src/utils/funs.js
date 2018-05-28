@@ -81,7 +81,7 @@ const switchToPlay = function (e) {
 };
 const playControl = function (e) {
 	let dataset = e.currentTarget.dataset;
-	if (dataset.audioType && dataset.audioType != this.audioType || dataset.audioIndex && dataset.audioIndex != this.index) {
+	if (dataset.audioType && dataset.audioType != this.type || dataset.audioIndex && dataset.audioIndex != this.index) {
 		this.$store.commit('RESET_DATA', {
 			type: dataset.audioType,
 			index: dataset.audioIndex
@@ -95,18 +95,8 @@ const playControl = function (e) {
 		this.$store.getters.Audio.pause();
 		this.$store.commit('SET_ONPLAY', false);
 	} else {
-
-		/*
-       if (localStorage.getItem('ended')) {
-          app.data.Audio = wx.getBackgroundAudioManager();
-          localStorage.removeItem('ended')
-          app.data.Audio.src = app.data.url;
-          app.data.Audio.play()
-       }
-       if (app.data.url && app.data.Audio.src != app.data.url) {
-          app.data.Audio.src = app.data.url;
-       }
-       */
+		// 解决 uc 首次 play 无效的问题
+		this.$store.getters.Audio.play();
 		this.$store.commit('SET_ONPLAY', true);
 
 		setTimeout(() => {

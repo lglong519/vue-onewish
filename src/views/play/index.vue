@@ -1,5 +1,5 @@
 <template>
-	<div class="play">
+	<div class="play" @click="touchScreen">
 		<i v-if='showZoom' class='material-icons text-30 text-grey zoom' :class='{"text-white":type !=="articleZH" && type !=="articleEN"}' @click='zoom'>{{hideTabBar?"select_all":"zoom_out_map"}}</i>
 
 		<!--文章  -->
@@ -65,7 +65,7 @@
 		<div v-if='showToast' class='playmode-toast'>
 			<div class='mode-name'>{{modeName[modeIndex]}}</div>
 		</div>
-		<ThePlayController @showToastEvent='showToastEvent' @modeIndexEvent='modeIndexEvent' @sliderChange='sliderChange' @sliderChanging='sliderChanging' @updateLyrics='updateLyrics' :data='{currentTime,show,currentTimeFormat,durationFormat,duration,modeIcon,modeIndex,hideTabBar}'></ThePlayController>
+		<ThePlayController @showToastEvent='showToastEvent' @modeIndexEvent='modeIndexEvent' @sliderChange='sliderChange' @sliderChanging='sliderChanging' @updateLyrics='updateLyrics' :data='{currentTime,show,currentTimeFormat,durationFormat,duration,modeIcon,modeIndex,hideTabBar,waitTime}'></ThePlayController>
 	</div>
 </template>
 
