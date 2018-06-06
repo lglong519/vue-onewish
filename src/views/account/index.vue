@@ -5,7 +5,7 @@
                 <img bindtap="bindViewTap" class="userinfo-avatar mx-4" :src="userInfo.avatarUrl" background-size="cover"/>
                 <span class="userinfo-nickname">{{userInfo.nickName}}</span>
             </div>
-            <img bindtap='previewImage' class='qrcode mx-4' src='/static/images/qrcode.jpg'/>
+            <img bindtap='previewImage' class='qrcode mx-4' src='../../statical/images/qrcode.jpg'/>
         </div>
 
         <!-- <picker bindchange="tapPlayMode" value="{{index}}" range="{{mode}}"> -->

@@ -51,11 +51,11 @@
 		<div v-else class="page page-music flex-column align-center">
 			<div class='z-index disc-wrapper rotation' :class='{"animation-paused":!show || !onPlay }' @click='playControl'>
 				<img src='../../assets/images/disc.png' class='disc' />
-				<img :src='currAudio[0].image || "/static/images/2018fly.jpg"' class='disc-image' />
+				<img :src='currAudio[0].image || "../../statical/images/2018fly.jpg"' class='disc-image' />
 			</div>
 			<div class='z-index mt-4 text-white'>{{currAudio[0].title}}</div>
 			<div class='z-index mt-2 text-white'>{{currAudio[0].author}}</div>
-			<img :src='currAudio[0].image || "/static/images/stars-128.jpg"' class='bg-music blur' />
+			<img :src='currAudio[0].image || "../../statical/images/stars-128.jpg"' class='bg-music blur' />
 			<div class='z-index mt-3 text-white text-center lrc-container'>
 				<div v-if="lyrics" class="lrc-box" :style="lyricIndex">
 					<span v-for="(lrc,i) in lyrics.lyricList" :key='lrc.time' :class="{'text-green-0':lrc.time==currLyric}" :id="'lyric'+i">{{lrc.text}}</span>

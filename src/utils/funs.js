@@ -1,8 +1,8 @@
-import articleZH from '../../static/libs/articleZH';
-import articleEN from '../../static/libs/articleEN';
-import classical from '../../static/libs/classical';
-import music from '../../static/libs/music';
-import lyric from '../../static/libs/lyric';
+import articleZH from '../statical/libs/articleZH';
+import articleEN from '../statical/libs/articleEN';
+import classical from '../statical/libs/classical';
+import music from '../statical/libs/music';
+import lyric from '../statical/libs/lyric';
 
 import { setTimeout } from 'timers';
 

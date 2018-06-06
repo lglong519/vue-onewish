@@ -3,7 +3,8 @@ export default {
 	data () {
 		return {
 			userInfo: {
-				avatarUrl: '/static/images/panda-music.jpg'
+				avatarUrl: 'static/img/panda-music.jpg',
+				avatarUrlCopy: '../../statical/images/panda-music.jpg'
 			},
 			modeIcon: this.$store.getters.playModeLib.list,
 			modeName: this.$store.getters.playModeLib.name,
